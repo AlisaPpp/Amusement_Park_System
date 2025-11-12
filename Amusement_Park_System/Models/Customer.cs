@@ -2,7 +2,7 @@ namespace Amusement_Park_System;
 
 public class Customer
 {
-    private string _name;
+    private string _name = "";
 
     public string Name
     {
@@ -13,7 +13,7 @@ public class Customer
                 throw new ArgumentException("Name cannot be empty");
         }
     }
-    private string _surname;
+    private string _surname = "";
 
     public string Surname
     {
@@ -26,7 +26,7 @@ public class Customer
         }
     }
 
-    public string _contactInfo;
+    private string _contactInfo = "";
 
     public string ContactInfo
     {

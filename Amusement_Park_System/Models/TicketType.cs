@@ -2,7 +2,7 @@ namespace Amusement_Park_System;
 
 public class TicketType
 {
-    private string _typeName { get; set; }
+    private string _typeName = "";
     public string TypeName
     {
         get => _typeName;

@@ -2,7 +2,7 @@ namespace Amusement_Park_System;
 
 public class Promotion
 {
-    private string _name;
+    private string _name = "";
     public string Name
     {
         get => _name;
