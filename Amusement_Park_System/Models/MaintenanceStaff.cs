@@ -27,6 +27,6 @@ public class MaintenanceStaff : Employee
         }
     }
     
-    public List<string>? Certifications { get; private set; }
+    public List<string>? Certifications { get; set; }
 
 }

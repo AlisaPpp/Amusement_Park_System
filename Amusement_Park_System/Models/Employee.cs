@@ -9,8 +9,6 @@ public abstract class Employee
             ContactInfo = contactInfo;
             BirthDate = birthDate;
             YearsOfExperience = yearsOfExperience;
-
-    
         }
 
         private string _name = "";
@@ -61,8 +59,7 @@ public abstract class Employee
         public int YearsOfExperience
         {
             get => _yearsOfExperience;
-            set
-            {
+            set {
                 if (value < 0) throw new ArgumentException("YearsOfExperience cannot be negative.");
                 _yearsOfExperience = value;
             }
