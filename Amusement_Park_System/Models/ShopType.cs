@@ -4,8 +4,6 @@ public enum ShopType
 {
     Food,
     Merchandise,
-    Souvenir,
     Beverage,
-    Clothing,
-    Accessories,
+    VendingMachine
 }
