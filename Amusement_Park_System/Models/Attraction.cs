@@ -2,4 +2,5 @@
 
 public class Attraction
 {
+    private String Name {get; set;}
 }
