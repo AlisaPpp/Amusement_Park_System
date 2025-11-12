@@ -14,7 +14,7 @@ public class Zone
     public string Name
     {
         get => _name;
-        private set
+        set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Zone name cannot be empty.");
@@ -25,7 +25,7 @@ public class Zone
     public string Theme
     {
         get => _theme;
-        private set
+        set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Zone theme cannot be empty.");
@@ -36,13 +36,13 @@ public class Zone
     public TimeSpan OpeningTime
     {
         get => _openingTime;
-        private set => _openingTime = value;
+        set => _openingTime = value;
     }
 
     public TimeSpan ClosingTime
     {
         get => _closingTime;
-        private set
+        set
         {
             if (value <= _openingTime)
                 throw new ArgumentException("Closing time must be after opening time.");
