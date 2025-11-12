@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Amusement_Park_System_Tests
 {
-    public class Tests
+    public class LightAttractionTests
     {
         private readonly Attraction lightAttraction = new LightAttraction("Zadra",
             100, 20, true, true);
