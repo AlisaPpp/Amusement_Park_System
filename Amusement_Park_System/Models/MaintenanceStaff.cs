@@ -1,4 +1,4 @@
-namespace Amusement_Park_System;
+namespace Amusement_Park_System.Models;
 
 public class MaintenanceStaff : Employee
 {

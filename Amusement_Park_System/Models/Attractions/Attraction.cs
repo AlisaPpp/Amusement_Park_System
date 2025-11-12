@@ -18,7 +18,7 @@ public abstract class Attraction
          set
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Attraction name cannot be empty or whitespace.");
+                throw new ArgumentException("Attraction name cannot be empty.");
             _name = value;
         }
     }
