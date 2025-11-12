@@ -3,25 +3,15 @@ namespace Amusement_Park_System;
 [Serializable]
 public class ExtremeAttraction : Attraction
 {
-    public int MinimumAge { get; private set; }
-    public int MinimumHeightRequirement { get; private set; }
+    public static int MinimumAge = 12;
+    public static int MinimumHeightRequirement = 140;
     public List<string>? SafetyRestrictions { get; private set; }
 
 
-    public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks,
-                           int minimumAge, int minimumHeightRequirement, string safetyRestrictions)
+    public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks, string safetyRestrictions)
         : base(name, height, maxSeats, vipPassWorks)
     {
-        if (minimumAge < 12)
-            throw new ArgumentException("Extreme attractions require minimum age of 12 years");
-        if (minimumHeightRequirement < 140)
-            throw new ArgumentException("Extreme attractions must have minimum height of 140cm");
-        if (string.IsNullOrWhiteSpace(safetyRestrictions))
-            throw new ArgumentException("Safety restrictions cannot be empty");
-
-        this.MinimumAge = minimumAge;
-        this.MinimumHeightRequirement = minimumHeightRequirement;
-        this.SafetyRestrictions = new List<string>();
+        SafetyRestrictions = new List<string>();
     }
 
 
