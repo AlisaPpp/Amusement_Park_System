@@ -9,7 +9,7 @@ public class FourDRide : Attraction
     public double ShowDuration 
     { 
         get => _showDuration;
-        private set
+        set
         {
             if (value < 0)
                 throw new ArgumentException("Show duration cannot be negative.");
@@ -20,7 +20,7 @@ public class FourDRide : Attraction
     public List<string> EffectTypes 
     { 
         get => new List<string>(_effectTypes);
-        private set
+        set
         {
             if (value == null || value.Count == 0)
                 throw new ArgumentException("Effect types must contain at least one effect.");

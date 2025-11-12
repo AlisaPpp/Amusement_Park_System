@@ -15,7 +15,7 @@ public abstract class Attraction
     public string Name 
     { 
         get => _name;
-         set
+        set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Attraction name cannot be empty.");
@@ -54,7 +54,7 @@ public abstract class Attraction
     public AttractionState State 
     { 
         get => _state;
-        protected set => _state = value;
+        set => _state = value;
     }
 
     protected Attraction(string name, int height, int maxSeats, bool vipPassWorks)

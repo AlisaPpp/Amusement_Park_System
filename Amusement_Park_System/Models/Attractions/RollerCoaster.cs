@@ -10,7 +10,7 @@ public class RollerCoaster : Attraction
     public double TrackLength 
     { 
         get => _trackLength;
-        private set
+        set
         {
             if (value < 0)
                 throw new ArgumentException("Track length cannot be negative.");
@@ -21,7 +21,7 @@ public class RollerCoaster : Attraction
     public double MaxSpeed 
     { 
         get => _maxSpeed;
-        private set
+        set
         {
             if (value < 0)
                 throw new ArgumentException("Max speed cannot be negative.");
@@ -32,7 +32,7 @@ public class RollerCoaster : Attraction
     public int NumberOfLoops 
     { 
         get => _numberOfLoops;
-        private set
+        set
         {
             if (value < 0)
                 throw new ArgumentException("Number of loops cannot be negative.");
