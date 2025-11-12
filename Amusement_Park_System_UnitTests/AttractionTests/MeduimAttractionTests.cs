@@ -6,7 +6,7 @@ namespace Amusement_Park_System_Tests
 {
     public class MeduimAttractionTests
     {
-        private readonly Attraction mediumAttraction = new MediumAttraction("Pepsy hyperion",
+        private Attraction mediumAttraction = new MediumAttraction("Pepsy hyperion",
             120, 24, false, true);
 
         [Test]
