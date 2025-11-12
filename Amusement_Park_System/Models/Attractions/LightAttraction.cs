@@ -10,7 +10,7 @@ public class LightAttraction : Attraction
     public bool IsParentSupervisionRequired 
     { 
         get => _isParentSupervisionRequired;
-        private set => _isParentSupervisionRequired = value;
+        set => _isParentSupervisionRequired = value;
     }
     
 

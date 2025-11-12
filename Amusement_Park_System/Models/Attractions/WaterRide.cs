@@ -9,7 +9,7 @@ public class WaterRide : Attraction
     public double WaterDepth 
     { 
         get => _waterDepth;
-        private set
+        set
         {
             if (value < 0)
                 throw new ArgumentException("Water depth cannot be negative.");
@@ -20,7 +20,7 @@ public class WaterRide : Attraction
     public double WaterTemperature 
     { 
         get => _waterTemperature;
-        private set => _waterTemperature = value;
+        set => _waterTemperature = value;
     }
 
     public WaterRide(string name, int height, int maxSeats, bool vipPassWorks,

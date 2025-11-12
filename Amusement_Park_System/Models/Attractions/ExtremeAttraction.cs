@@ -11,7 +11,7 @@ public class ExtremeAttraction : Attraction
     public List<string>? SafetyRestrictions 
     { 
         get => _safetyRestrictions;
-        private set => _safetyRestrictions = value;
+        set => _safetyRestrictions = value;
     }
 
 

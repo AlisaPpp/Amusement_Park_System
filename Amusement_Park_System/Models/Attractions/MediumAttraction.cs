@@ -11,7 +11,7 @@ public class MediumAttraction : Attraction
     public bool FamilyFriendly 
     { 
         get => _familyFriendly;
-        private set => _familyFriendly = value;
+        set => _familyFriendly = value;
     }
     
     public MediumAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool familyFriendly)
