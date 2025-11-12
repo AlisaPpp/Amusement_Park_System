@@ -6,7 +6,7 @@ namespace Amusement_Park_System_Tests
 {
     public class LightAttractionTests
     {
-        private readonly Attraction lightAttraction = new LightAttraction("Zadra",
+        private Attraction lightAttraction = new LightAttraction("Zadra",
             100, 20, true, true);
 
         [Test]
