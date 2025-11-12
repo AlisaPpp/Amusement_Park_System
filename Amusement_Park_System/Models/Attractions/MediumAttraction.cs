@@ -1,8 +1,13 @@
+using Amusement_Park_System.Persistence;
+
 namespace Amusement_Park_System;
 
-[Serializable]
 public class MediumAttraction : Attraction
 {
+    public static List<MediumAttraction> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/mediumAttractions.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     public const int MinimumHeightRequirement = 120;
     public const int MinimumAge = 8;
     

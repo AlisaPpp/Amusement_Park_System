@@ -1,8 +1,15 @@
-﻿namespace Amusement_Park_System;
+﻿using Amusement_Park_System.Persistence;
 
-[Serializable]
+namespace Amusement_Park_System;
+
 public class WaterRide : Attraction
 {
+    
+    public static List<WaterRide> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/waterRides.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    
     private double _waterDepth;
     private double _waterTemperature;
 
@@ -29,5 +36,6 @@ public class WaterRide : Attraction
     {
         WaterDepth = waterDepth;
         WaterTemperature = waterTemperature;
+        Extent.Add(this);
     }
 }

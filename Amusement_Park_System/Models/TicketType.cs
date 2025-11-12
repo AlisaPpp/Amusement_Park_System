@@ -1,7 +1,13 @@
+using Amusement_Park_System.Persistence;
+
 namespace Amusement_Park_System.Models;
 
 public class TicketType
 {
+    public static List<TicketType> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/ticketTypes.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     private string _typeName = "";
     public string TypeName
     {
@@ -39,5 +45,7 @@ public class TicketType
         TypeName = typeName;
         IsVip = isVip;
         InitialPrice = initialPrice;
+        
+        Extent.Add(this);
     }
 }

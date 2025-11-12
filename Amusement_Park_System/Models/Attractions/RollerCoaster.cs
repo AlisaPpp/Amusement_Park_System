@@ -1,8 +1,13 @@
-﻿namespace Amusement_Park_System;
+﻿using Amusement_Park_System.Persistence;
 
-[Serializable]
+namespace Amusement_Park_System;
+
 public class RollerCoaster : Attraction
 {
+    public static List<RollerCoaster> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/rollerCoasters.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     private double _trackLength;
     private double _maxSpeed;
     private int _numberOfLoops;
@@ -47,5 +52,6 @@ public class RollerCoaster : Attraction
         TrackLength = trackLength;
         MaxSpeed = maxSpeed;
         NumberOfLoops = numberOfLoops;
+        Extent.Add(this);
     }
 }

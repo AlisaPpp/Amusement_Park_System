@@ -1,7 +1,13 @@
+using Amusement_Park_System.Persistence;
+
 namespace Amusement_Park_System.Models;
 
 public class RideOperator : Employee
 {
+    public static List<RideOperator> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/rideOperators.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     public RideOperator(
         string name,
         string surname,
@@ -14,6 +20,7 @@ public class RideOperator : Employee
     {
         OperatorLicenceId = operatorLicenceId;
         IsFirstAidCertified = isFirstAidCertified;
+        Extent.Add(this);
     }
 
     private string _operatorLicenceId = "";

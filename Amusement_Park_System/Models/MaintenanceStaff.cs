@@ -1,7 +1,13 @@
+using Amusement_Park_System.Persistence;
+
 namespace Amusement_Park_System.Models;
 
 public class MaintenanceStaff : Employee
 {
+    public static List<MaintenanceStaff> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/maintenanceStaff.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     public MaintenanceStaff(
         string name,
         string surname,
@@ -14,6 +20,7 @@ public class MaintenanceStaff : Employee
     {
         Specialization = specialization;
         Certifications = certifications;
+        Extent.Add(this);
     }
 
     private string _specialization = "";

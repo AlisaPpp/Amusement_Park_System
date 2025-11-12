@@ -1,3 +1,6 @@
+using Amusement_Park_System.Models;
+using Amusement_Park_System.Persistence;
+
 namespace Amusement_Park_System;
 using System;
 using System.Collections.Generic;
@@ -5,6 +8,10 @@ using System.Collections.Generic;
 [Serializable]
 public class Zone
 {
+    public static List<Zone> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/zones.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     
     private string _name;
     private string _theme;
@@ -57,5 +64,6 @@ public class Zone
         OpeningTime = openingTime;
         ClosingTime = closingTime;
         
+        Extent.Add(this);
     }
 }

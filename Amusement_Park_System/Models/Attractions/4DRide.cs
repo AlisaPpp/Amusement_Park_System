@@ -1,8 +1,14 @@
-﻿namespace Amusement_Park_System;
+﻿using Amusement_Park_System.Models;
+using Amusement_Park_System.Persistence;
 
-[Serializable]
+namespace Amusement_Park_System;
+
 public class FourDRide : Attraction
 {
+    public static List<FourDRide> Extent = new();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/fourDRides.json"));
+    public static void Save() => ExtentManager.Save(Extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
     private double _showDuration;
     private List<string> _effectTypes;
 
@@ -34,5 +40,6 @@ public class FourDRide : Attraction
     {
         ShowDuration = showDuration;
         EffectTypes = effectTypes;
+        Extent.Add(this);
     }
 }
