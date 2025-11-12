@@ -27,6 +27,6 @@ public class RideOperator : Employee
         }
     }
 
-    public bool IsFirstAidCertified { get; private set; }
+    public bool IsFirstAidCertified { get; set; }
 
 }

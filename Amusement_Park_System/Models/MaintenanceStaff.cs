@@ -1,4 +1,4 @@
-namespace Amusement_Park_System;
+namespace Amusement_Park_System.Models;
 
 public class MaintenanceStaff : Employee
 {
@@ -27,6 +27,6 @@ public class MaintenanceStaff : Employee
         }
     }
     
-    public List<string>? Certifications { get; private set; }
+    public List<string>? Certifications { get; set; }
 
 }
