@@ -1,4 +1,4 @@
-namespace Amusement_Park_System;
+namespace Amusement_Park_System.Models;
 
 public abstract class Employee
     {
@@ -53,6 +53,8 @@ public abstract class Employee
             set
             {
                 if (value > DateTime.Now) throw new ArgumentException("BirthDate cannot be in the future.");
+                if (value > DateTime.Now.AddYears(-18))
+                    throw new ArgumentException("Employee must be at least 18 years old.");
                 _birthDate = value;
             }
         }
