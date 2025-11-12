@@ -6,8 +6,6 @@ using System.IO;
 [Serializable]
 public abstract class Attraction
 {
-    public static List<Attraction> Extent { get; private set; } = new List<Attraction>();
-    
     private string _name;
     private int _height;
     private int _maxSeats;
@@ -65,7 +63,6 @@ public abstract class Attraction
         Height = height;
         MaxSeats = maxSeats;
         VipPassWorks = vipPassWorks;
-
-        Extent.Add(this);
+        
     }
 }
