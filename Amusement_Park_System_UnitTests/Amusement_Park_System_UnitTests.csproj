@@ -21,4 +21,8 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Amusement_Park_System\Amusement_Park_System.csproj" />
+    </ItemGroup>
+
 </Project>
