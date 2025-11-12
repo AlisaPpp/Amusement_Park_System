@@ -3,9 +3,15 @@ namespace Amusement_Park_System;
 [Serializable]
 public class LightAttraction : Attraction
 {
+    public static int MinimumHeightRequirement = 100;
+    
+    private bool _isParentSupervisionRequired;
 
-    public int MinimumHeightRequirement = 100;
-    public bool IsParentSupervisionRequired { get; private set; }
+    public bool IsParentSupervisionRequired 
+    { 
+        get => _isParentSupervisionRequired;
+        private set => _isParentSupervisionRequired = value;
+    }
     
 
     public LightAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool isParentSupervisionRequired )
