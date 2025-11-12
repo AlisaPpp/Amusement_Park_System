@@ -1,8 +1,8 @@
-namespace Amusement_Park_System;
+namespace Amusement_Park_System.Models;
 
 public class Promotion
 {
-    private string _name;
+    private string _name = "";
     public string Name
     {
         get => _name;

@@ -1,8 +1,8 @@
-namespace Amusement_Park_System;
+namespace Amusement_Park_System.Models;
 
 public class TicketType
 {
-    private string _typeName { get; set; }
+    private string _typeName = "";
     public string TypeName
     {
         get => _typeName;
@@ -13,14 +13,16 @@ public class TicketType
             _typeName = value;
         }
     }
-    private bool _isVip { get; set; }
+
+    private bool _isVip;
     public bool IsVip
     {
         get => _isVip;
         set => _isVip = value;
         
     }
-    private decimal _initialPrice { get; set; }
+
+    private decimal _initialPrice;
     public decimal InitialPrice
     {
         get => _initialPrice;
