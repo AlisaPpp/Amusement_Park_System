@@ -1,4 +1,4 @@
-namespace Amusement_Park_System;
+namespace Amusement_Park_System.Models;
 
 public class Ticket
 {
@@ -49,7 +49,6 @@ public class Ticket
         }
     }
     private decimal _price;
-
     public decimal Price
     {
         get => _price;

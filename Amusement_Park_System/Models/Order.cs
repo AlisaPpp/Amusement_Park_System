@@ -3,8 +3,8 @@ namespace Amusement_Park_System.Models;
 public class Order
 {
     public int Id { get; set; }
-    private string _paymentMethod;
-
+    
+    private string _paymentMethod = "";
     public string PaymentMethod
     {
         get => _paymentMethod;
