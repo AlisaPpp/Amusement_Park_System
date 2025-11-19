@@ -30,6 +30,31 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         }
 
         [Test]
+        public void Constructor_AddsInstanceToExtent()
+        {
+            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
+                50);
+            Promotion two = new Promotion("HalloweenSale", DateTime.Parse("2026-10-15"), DateTime.Parse("2026-11-03"),
+                30);
+
+            Assert.That(Promotion.Extent.Count, Is.EqualTo(2));
+            Assert.That(Promotion.Extent, Does.Contain(one));
+            Assert.That(Promotion.Extent, Does.Contain(two));
+        }
+        
+        [Test]
+        public void TestChangingPropertyUpdatesObjectInExtent()
+        {
+            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
+                50);
+            var fromExtent = Promotion.Extent.Single(x => x.Name == "ChristmasSale");
+            one.PromotionPercent = 60;
+
+            Assert.That(fromExtent.PromotionPercent, Is.EqualTo(60));
+        }
+
+
+        [Test]
         public void Save_CreatesFile()
         {
             Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
