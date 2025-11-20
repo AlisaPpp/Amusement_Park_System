@@ -1,8 +1,4 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-using NUnit.Framework;
+
 using Amusement_Park_System;
 
 namespace Amusement_Park_System_Tests.ExtentPersistanceTests

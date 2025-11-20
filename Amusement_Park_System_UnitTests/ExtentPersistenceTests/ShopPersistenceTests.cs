@@ -1,5 +1,4 @@
 using Amusement_Park_System;
-using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 {
