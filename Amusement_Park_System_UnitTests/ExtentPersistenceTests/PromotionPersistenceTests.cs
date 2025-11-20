@@ -1,4 +1,3 @@
-
 using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests.ExtentPersistanceTests
@@ -7,7 +6,6 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
     public class PromotionPersistenceTests
     {
         private string _filePath = Promotion.FilePath;
-
 
         //before every test
         [SetUp]
@@ -32,33 +30,42 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void Constructor_AddsInstanceToExtent()
         {
-            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
-                50);
-            Promotion two = new Promotion("HalloweenSale", DateTime.Parse("2026-10-15"), DateTime.Parse("2026-11-03"),
-                30);
+            var start1 = DateTime.Today.AddDays(10);
+            var end1 = start1.AddDays(30);
+
+            var start2 = DateTime.Today.AddDays(50);
+            var end2 = start2.AddDays(20);
+
+            var one = new Promotion("ChristmasSale", start1, end1, 50);
+            var two = new Promotion("HalloweenSale", start2, end2, 30);
 
             Assert.That(Promotion.Extent.Count, Is.EqualTo(2));
             Assert.That(Promotion.Extent, Does.Contain(one));
             Assert.That(Promotion.Extent, Does.Contain(two));
         }
-        
+
         [Test]
         public void TestChangingPropertyUpdatesObjectInExtent()
         {
-            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
-                50);
+            var start = DateTime.Today.AddDays(10);
+            var end = start.AddDays(30);
+
+            var one = new Promotion("ChristmasSale", start, end, 50);
+
             var fromExtent = Promotion.Extent.Single(x => x.Name == "ChristmasSale");
+
             one.PromotionPercent = 60;
 
             Assert.That(fromExtent.PromotionPercent, Is.EqualTo(60));
         }
 
-
         [Test]
         public void Save_CreatesFile()
         {
-            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
-                50);
+            var start = DateTime.Today.AddDays(10);
+            var end = start.AddDays(30);
+
+            var one = new Promotion("ChristmasSale", start, end, 50);
 
             Promotion.Save();
 
@@ -69,25 +76,29 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void SaveThenLoad_RestoresExtent()
         {
-            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
-                50);
-            Promotion two = new Promotion("HalloweenSale", DateTime.Parse("2026-10-15"), DateTime.Parse("2026-11-03"),
-                30);
+            var start1 = DateTime.Today.AddDays(10);
+            var end1 = start1.AddDays(30);
+
+            var start2 = DateTime.Today.AddDays(50);
+            var end2 = start2.AddDays(20);
+
+            var one = new Promotion("ChristmasSale", start1, end1, 50);
+            var two = new Promotion("HalloweenSale", start2, end2, 30);
 
             Promotion.Save();
             Promotion.Extent = new List<Promotion>();
             Promotion.Load();
 
-
             Assert.That(Promotion.Extent.Count, Is.EqualTo(2));
+
             var xmas = Promotion.Extent.Single(p => p.Name == "ChristmasSale");
-            Assert.That(xmas.StartDate, Is.EqualTo(DateTime.Parse("2026-01-08")));
-            Assert.That(xmas.EndDate, Is.EqualTo(DateTime.Parse("2026-09-02")));
+            Assert.That(xmas.StartDate, Is.EqualTo(start1));
+            Assert.That(xmas.EndDate, Is.EqualTo(end1));
             Assert.That(xmas.PromotionPercent, Is.EqualTo(50));
 
             var halloween = Promotion.Extent.Single(p => p.Name == "HalloweenSale");
-            Assert.That(halloween.StartDate, Is.EqualTo(DateTime.Parse("2026-10-15")));
-            Assert.That(halloween.EndDate, Is.EqualTo(DateTime.Parse("2026-11-03")));
+            Assert.That(halloween.StartDate, Is.EqualTo(start2));
+            Assert.That(halloween.EndDate, Is.EqualTo(end2));
             Assert.That(halloween.PromotionPercent, Is.EqualTo(30));
         }
 
@@ -97,11 +108,12 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Promotion one = new Promotion("ChristmasSale", DateTime.Parse("2026-01-08"), DateTime.Parse("2026-09-02"),
-                50);
+            var start = DateTime.Today.AddDays(10);
+            var end = start.AddDays(30);
+
+            var one = new Promotion("ChristmasSale", start, end, 50);
 
             Assert.That(Promotion.Extent, Is.Not.Empty);
-
 
             Promotion.Load();
 
