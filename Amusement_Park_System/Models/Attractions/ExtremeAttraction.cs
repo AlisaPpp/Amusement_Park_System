@@ -21,10 +21,10 @@ public class ExtremeAttraction : Attraction
     }
 
 
-    public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks, string safetyRestrictions)
+    public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks, List<string>? safetyRestrictions)
         : base(name, height, maxSeats, vipPassWorks)
     {
-        SafetyRestrictions = new List<string>();
+        SafetyRestrictions = safetyRestrictions;
         Extent.Add(this);
     }
 
