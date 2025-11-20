@@ -16,6 +16,7 @@ public class Customer
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("Name cannot be empty");
+            _name = value;
         }
     }
     private string _surname = "";
