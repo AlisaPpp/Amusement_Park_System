@@ -23,5 +23,6 @@ public class MediumAttraction : Attraction
         : base(name, height, maxSeats, vipPassWorks)
     {
         FamilyFriendly = familyFriendly;
+        Extent.Add(this);
     }
 }
