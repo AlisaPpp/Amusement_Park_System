@@ -1,5 +1,4 @@
 ﻿using Amusement_Park_System.Models;
-using System;
 
 namespace Amusement_Park_System_Tests
 {
@@ -8,16 +7,11 @@ namespace Amusement_Park_System_Tests
         private readonly RideOperator rideOperator = new RideOperator(
             "Mike", "Johnson", "mike.johnson@park.com", new DateTime(1990, 3, 20), 5, "OP12345", true);
 
+        // OperatorLicenceId Tests
         [Test]
         public void TestRideOperatorOperatorLicenceId()
         {
             Assert.That(rideOperator.OperatorLicenceId, Is.EqualTo("OP12345"));
-        }
-
-        [Test]
-        public void TestRideOperatorIsFirstAidCertified()
-        {
-            Assert.That(rideOperator.IsFirstAidCertified, Is.True);
         }
 
         [Test]
@@ -54,6 +48,13 @@ namespace Amusement_Park_System_Tests
             var op = new RideOperator("Test", "User", "test@test.com", new DateTime(1990, 1, 1), 3, "LIC123", false);
             op.OperatorLicenceId = "NEW456";
             Assert.That(op.OperatorLicenceId, Is.EqualTo("NEW456"));
+        }
+
+        // IsFirstAidCertified Tests
+        [Test]
+        public void TestRideOperatorIsFirstAidCertified()
+        {
+            Assert.That(rideOperator.IsFirstAidCertified, Is.True);
         }
 
         [Test]

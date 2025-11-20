@@ -1,5 +1,4 @@
 ﻿using Amusement_Park_System;
-using System;
 
 namespace Amusement_Park_System_Tests
 {
@@ -8,28 +7,11 @@ namespace Amusement_Park_System_Tests
         private Zone zone = new Zone("Aqualantis", "Water theme", 
             new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
 
+        // Name Tests
         [Test]
         public void TestZoneName()
         {
             Assert.That(zone.Name, Is.EqualTo("Aqualantis"));
-        }
-
-        [Test]
-        public void TestZoneTheme()
-        {
-            Assert.That(zone.Theme, Is.EqualTo("Water theme"));
-        }
-
-        [Test]
-        public void TestZoneOpeningTime()
-        {
-            Assert.That(zone.OpeningTime, Is.EqualTo(new TimeSpan(9, 0, 0)));
-        }
-
-        [Test]
-        public void TestZoneClosingTime()
-        {
-            Assert.That(zone.ClosingTime, Is.EqualTo(new TimeSpan(18, 0, 0)));
         }
 
         [Test]
@@ -44,34 +26,6 @@ namespace Amusement_Park_System_Tests
         {
             Assert.Throws<ArgumentException>(() => new Zone(null, "Theme", 
                 new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
-        }
-
-        [Test]
-        public void TestZoneEmptyThemeException()
-        {
-            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", "", 
-                new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
-        }
-
-        [Test]
-        public void TestZoneNullThemeException()
-        {
-            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", null, 
-                new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
-        }
-
-        [Test]
-        public void TestZoneClosingTimeBeforeOpeningException()
-        {
-            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", "Theme", 
-                new TimeSpan(18, 0, 0), new TimeSpan(9, 0, 0)));
-        }
-
-        [Test]
-        public void TestZoneClosingTimeEqualOpeningException()
-        {
-            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", "Theme", 
-                new TimeSpan(9, 0, 0), new TimeSpan(9, 0, 0)));
         }
 
         [Test]
@@ -90,6 +44,27 @@ namespace Amusement_Park_System_Tests
             Assert.Throws<ArgumentException>(() => testZone.Name = null);
         }
 
+        // Theme Tests
+        [Test]
+        public void TestZoneTheme()
+        {
+            Assert.That(zone.Theme, Is.EqualTo("Water theme"));
+        }
+
+        [Test]
+        public void TestZoneEmptyThemeException()
+        {
+            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", "", 
+                new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
+        }
+
+        [Test]
+        public void TestZoneNullThemeException()
+        {
+            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", null, 
+                new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
+        }
+
         [Test]
         public void TestZoneThemeSetterEmptyException()
         {
@@ -104,6 +79,34 @@ namespace Amusement_Park_System_Tests
             var testZone = new Zone("Test", "Theme", 
                 new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
             Assert.Throws<ArgumentException>(() => testZone.Theme = null);
+        }
+
+        // OpeningTime Tests
+        [Test]
+        public void TestZoneOpeningTime()
+        {
+            Assert.That(zone.OpeningTime, Is.EqualTo(new TimeSpan(9, 0, 0)));
+        }
+
+        // ClosingTime Tests
+        [Test]
+        public void TestZoneClosingTime()
+        {
+            Assert.That(zone.ClosingTime, Is.EqualTo(new TimeSpan(18, 0, 0)));
+        }
+
+        [Test]
+        public void TestZoneClosingTimeBeforeOpeningException()
+        {
+            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", "Theme", 
+                new TimeSpan(18, 0, 0), new TimeSpan(9, 0, 0)));
+        }
+
+        [Test]
+        public void TestZoneClosingTimeEqualOpeningException()
+        {
+            Assert.Throws<ArgumentException>(() => new Zone("Adventure Land", "Theme", 
+                new TimeSpan(9, 0, 0), new TimeSpan(9, 0, 0)));
         }
 
         [Test]

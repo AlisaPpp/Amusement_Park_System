@@ -1,5 +1,4 @@
 ﻿using Amusement_Park_System.Models;
-using System;
 
 namespace Amusement_Park_System_Tests
 {

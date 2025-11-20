@@ -1,5 +1,4 @@
 ﻿using Amusement_Park_System.Models;
-using System;
 
 namespace Amusement_Park_System_Tests
 {
@@ -8,22 +7,11 @@ namespace Amusement_Park_System_Tests
         private readonly MalfunctionReport malfunctionReport = new MalfunctionReport(
             "Electrical", "Ride stopped working during operation", new DateTime(2024, 1, 15));
 
+        // Type Tests
         [Test]
         public void TestMalfunctionReportType()
         {
             Assert.That(malfunctionReport.Type, Is.EqualTo("Electrical"));
-        }
-
-        [Test]
-        public void TestMalfunctionReportDescription()
-        {
-            Assert.That(malfunctionReport.Description, Is.EqualTo("Ride stopped working during operation"));
-        }
-
-        [Test]
-        public void TestMalfunctionReportDate()
-        {
-            Assert.That(malfunctionReport.Date, Is.EqualTo(new DateTime(2024, 1, 15)));
         }
 
         [Test]
@@ -41,27 +29,6 @@ namespace Amusement_Park_System_Tests
         }
 
         [Test]
-        public void TestMalfunctionReportEmptyDescriptionException()
-        {
-            Assert.Throws<ArgumentException>(() => new MalfunctionReport(
-                "Type", "", new DateTime(2024, 1, 15)));
-        }
-
-        [Test]
-        public void TestMalfunctionReportNullDescriptionException()
-        {
-            Assert.Throws<ArgumentException>(() => new MalfunctionReport(
-                "Type", null, new DateTime(2024, 1, 15)));
-        }
-
-        [Test]
-        public void TestMalfunctionReportFutureDateException()
-        {
-            Assert.Throws<ArgumentException>(() => new MalfunctionReport(
-                "Type", "Description", DateTime.Now.AddDays(1)));
-        }
-
-        [Test]
         public void TestMalfunctionReportTypeSetterEmptyException()
         {
             var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
@@ -73,6 +40,35 @@ namespace Amusement_Park_System_Tests
         {
             var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
             Assert.Throws<ArgumentException>(() => report.Type = null);
+        }
+
+        [Test]
+        public void TestMalfunctionReportTypeSetter()
+        {
+            var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
+            report.Type = "Mechanical";
+            Assert.That(report.Type, Is.EqualTo("Mechanical"));
+        }
+
+        // Description Tests
+        [Test]
+        public void TestMalfunctionReportDescription()
+        {
+            Assert.That(malfunctionReport.Description, Is.EqualTo("Ride stopped working during operation"));
+        }
+
+        [Test]
+        public void TestMalfunctionReportEmptyDescriptionException()
+        {
+            Assert.Throws<ArgumentException>(() => new MalfunctionReport(
+                "Type", "", new DateTime(2024, 1, 15)));
+        }
+
+        [Test]
+        public void TestMalfunctionReportNullDescriptionException()
+        {
+            Assert.Throws<ArgumentException>(() => new MalfunctionReport(
+                "Type", null, new DateTime(2024, 1, 15)));
         }
 
         [Test]
@@ -90,26 +86,32 @@ namespace Amusement_Park_System_Tests
         }
 
         [Test]
-        public void TestMalfunctionReportDateSetterFutureException()
-        {
-            var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
-            Assert.Throws<ArgumentException>(() => report.Date = DateTime.Now.AddDays(1));
-        }
-
-        [Test]
-        public void TestMalfunctionReportTypeSetter()
-        {
-            var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
-            report.Type = "Mechanical";
-            Assert.That(report.Type, Is.EqualTo("Mechanical"));
-        }
-
-        [Test]
         public void TestMalfunctionReportDescriptionSetter()
         {
             var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
             report.Description = "New description";
             Assert.That(report.Description, Is.EqualTo("New description"));
+        }
+
+        // Date Tests
+        [Test]
+        public void TestMalfunctionReportDate()
+        {
+            Assert.That(malfunctionReport.Date, Is.EqualTo(new DateTime(2024, 1, 15)));
+        }
+
+        [Test]
+        public void TestMalfunctionReportFutureDateException()
+        {
+            Assert.Throws<ArgumentException>(() => new MalfunctionReport(
+                "Type", "Description", DateTime.Now.AddDays(1)));
+        }
+
+        [Test]
+        public void TestMalfunctionReportDateSetterFutureException()
+        {
+            var report = new MalfunctionReport("Type", "Description", new DateTime(2024, 1, 15));
+            Assert.Throws<ArgumentException>(() => report.Date = DateTime.Now.AddDays(1));
         }
 
         [Test]

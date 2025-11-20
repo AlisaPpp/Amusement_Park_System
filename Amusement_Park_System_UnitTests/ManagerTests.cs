@@ -1,5 +1,4 @@
 ﻿using Amusement_Park_System.Models;
-using System;
 
 namespace Amusement_Park_System_Tests
 {
@@ -8,12 +7,14 @@ namespace Amusement_Park_System_Tests
         private readonly Manager manager = new Manager(
             "Sarah", "Wilson", "sarah.wilson@park.com", new DateTime(1980, 8, 10), 8);
 
+        // MinYearsOfExperience Tests 
         [Test]
         public void TestManagerMinYearsOfExperience()
         {
             Assert.That(Manager.MinYearsOfExperience, Is.EqualTo(3));
         }
 
+        // YearsOfExperience Validation Tests
         [Test]
         public void TestManagerInsufficientExperienceException()
         {

@@ -1,5 +1,4 @@
 ﻿using Amusement_Park_System.Models;
-using System;
 
 namespace Amusement_Park_System_Tests
 {
@@ -10,6 +9,7 @@ namespace Amusement_Park_System_Tests
             new DateTime(2024, 1, 15, 9, 0, 0),
             new DateTime(2024, 1, 15, 17, 0, 0));
 
+        // Date Tests
         [Test]
         public void TestShiftDate()
         {
@@ -17,11 +17,35 @@ namespace Amusement_Park_System_Tests
         }
 
         [Test]
+        public void TestShiftDateSetter()
+        {
+            var testShift = new Shift(
+                new DateTime(2024, 1, 15),
+                new DateTime(2024, 1, 15, 9, 0, 0),
+                new DateTime(2024, 1, 15, 17, 0, 0));
+            testShift.Date = new DateTime(2024, 1, 16);
+            Assert.That(testShift.Date, Is.EqualTo(new DateTime(2024, 1, 16)));
+        }
+
+        // StartTime Tests
+        [Test]
         public void TestShiftStartTime()
         {
             Assert.That(shift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 9, 0, 0)));
         }
 
+        [Test]
+        public void TestShiftStartTimeSetter()
+        {
+            var testShift = new Shift(
+                new DateTime(2024, 1, 15),
+                new DateTime(2024, 1, 15, 9, 0, 0),
+                new DateTime(2024, 1, 15, 17, 0, 0));
+            testShift.StartTime = new DateTime(2024, 1, 15, 10, 0, 0);
+            Assert.That(testShift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 10, 0, 0)));
+        }
+
+        // EndTime Tests
         [Test]
         public void TestShiftEndTime()
         {
@@ -44,28 +68,6 @@ namespace Amusement_Park_System_Tests
                 new DateTime(2024, 1, 15),
                 new DateTime(2024, 1, 15, 9, 0, 0),
                 new DateTime(2024, 1, 15, 9, 0, 0)));
-        }
-
-        [Test]
-        public void TestShiftDateSetter()
-        {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            testShift.Date = new DateTime(2024, 1, 16);
-            Assert.That(testShift.Date, Is.EqualTo(new DateTime(2024, 1, 16)));
-        }
-
-        [Test]
-        public void TestShiftStartTimeSetter()
-        {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            testShift.StartTime = new DateTime(2024, 1, 15, 10, 0, 0);
-            Assert.That(testShift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 10, 0, 0)));
         }
 
         [Test]
