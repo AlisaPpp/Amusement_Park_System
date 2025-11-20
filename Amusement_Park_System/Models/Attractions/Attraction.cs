@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-[Serializable]
 public abstract class Attraction
 {
     private string _name;
