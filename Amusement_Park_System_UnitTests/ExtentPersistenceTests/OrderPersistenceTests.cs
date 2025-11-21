@@ -1,28 +1,11 @@
-
-using System.Reflection;
 using Amusement_Park_System.Models;
 
-namespace Amusement_Park_System_Tests.ExtentPersistanceTests
+namespace Amusement_Park_System_UnitTests.ExtentPersistenceTests
 {
     [TestFixture]
     public class OrderPersistenceTests
     {
         private string _filePath = Order.FilePath;
-
-        // helper to access private static Extent field via reflection
-        private static List<Order> GetExtent()
-        {
-            var field = typeof(Order).GetField("Extent",
-                BindingFlags.NonPublic | BindingFlags.Static);
-            return (List<Order>)field!.GetValue(null)!;
-        }
-
-        private static void SetExtent(List<Order> newExtent)
-        {
-            var field = typeof(Order).GetField("Extent",
-                BindingFlags.NonPublic | BindingFlags.Static);
-            field!.SetValue(null, newExtent);
-        }
 
         // before every test
         [SetUp]
@@ -31,7 +14,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            SetExtent(new List<Order>());
+            Order.Extent = new List<Order>();
         }
 
         // after every test
@@ -41,7 +24,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            SetExtent(new List<Order>());
+            Order.Extent = new List<Order>();
         }
 
         [Test]
@@ -50,11 +33,9 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var order1 = new Order(1, "Card", 50.0m);
             var order2 = new Order(2, "Cash", 30.5m);
 
-            var extent = GetExtent();
-
-            Assert.That(extent.Count, Is.EqualTo(2));
-            Assert.That(extent, Does.Contain(order1));
-            Assert.That(extent, Does.Contain(order2));
+            Assert.That(Order.Extent.Count, Is.EqualTo(2));
+            Assert.That(Order.Extent, Does.Contain(order1));
+            Assert.That(Order.Extent, Does.Contain(order2));
         }
 
         [Test]
@@ -62,8 +43,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         {
             var order = new Order(1, "Card", 50.0m);
 
-            var extent = GetExtent();
-            var fromExtent = extent.Single(o => o.Id == 1);
+            var fromExtent = Order.Extent.Single(o => o.Id == 1);
 
             order.TotalPrice = 75.0m;
 
@@ -89,18 +69,16 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             Order.Save();
 
-            SetExtent(new List<Order>());
+            Order.Extent = new List<Order>();
             Order.Load();
 
-            var extent = GetExtent();
+            Assert.That(Order.Extent.Count, Is.EqualTo(2));
 
-            Assert.That(extent.Count, Is.EqualTo(2));
-
-            var first = extent.Single(o => o.Id == 1);
+            var first = Order.Extent.Single(o => o.Id == 1);
             Assert.That(first.PaymentMethod, Is.EqualTo("Card"));
             Assert.That(first.TotalPrice, Is.EqualTo(50.0m));
 
-            var second = extent.Single(o => o.Id == 2);
+            var second = Order.Extent.Single(o => o.Id == 2);
             Assert.That(second.PaymentMethod, Is.EqualTo("Cash"));
             Assert.That(second.TotalPrice, Is.EqualTo(30.5m));
         }
@@ -113,11 +91,11 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             var order = new Order(1, "Card", 50.0m);
 
-            Assert.That(GetExtent(), Is.Not.Empty);
+            Assert.That(Order.Extent, Is.Not.Empty);
 
             Order.Load();
 
-            Assert.That(GetExtent(), Is.Empty);
+            Assert.That(Order.Extent, Is.Empty);
         }
     }
 }
