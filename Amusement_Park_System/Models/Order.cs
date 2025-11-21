@@ -3,7 +3,7 @@ namespace Amusement_Park_System.Models;
 
 public class Order
 {
-    private static List<Order> Extent = new();
+    public static List<Order> Extent = new();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/orders.json"));
     public static void Save() => ExtentManager.Save(Extent, FilePath);
     public static void Load() => ExtentManager.Load(ref Extent, FilePath);

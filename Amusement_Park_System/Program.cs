@@ -12,7 +12,12 @@ Order order2 = new Order(2, "someMethod", 30);
 
 Order.Save();
 
-Ticket ticket1 = new Ticket(DateTime.Parse("2025-11-15"), DateTime.Parse("2025-12-21"), 25, 2, 1500);
+Ticket ticket1 = new Ticket(DateTime.Parse("2026-11-15"), DateTime.Parse("2026-12-21"), 25, 2, 1500);
 
 Ticket.Save();
+Promotion.Load();
 
+foreach (Promotion promotion in Promotion.Extent)
+{
+    Console.WriteLine(promotion.Name);
+}
