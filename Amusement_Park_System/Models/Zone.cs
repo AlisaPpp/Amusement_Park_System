@@ -20,6 +20,13 @@ public class Zone
     private TimeSpan _openingTime;
     private TimeSpan _closingTime;
 
+    //composition
+    private Zone? _parentZone;
+    private HashSet<Zone> _childZones = new();
+    
+    //reflex
+    private Zone? _nextZone;
+
     public string Name
     {
         get => _name;
@@ -47,7 +54,6 @@ public class Zone
         get => _openingTime;
         set => _openingTime = value;
     }
-
     public TimeSpan ClosingTime
     {
         get => _closingTime;
@@ -58,6 +64,10 @@ public class Zone
             _closingTime = value;
         }
     }
+    
+    public Zone? ParentZone => _parentZone;
+    public IReadOnlyCollection<Zone> ChildZones => _childZones;
+    public Zone? NextZone => _nextZone;
 
     public Zone(string name, string theme, TimeSpan openingTime, TimeSpan closingTime)
     {
@@ -67,5 +77,76 @@ public class Zone
         ClosingTime = closingTime;
         
         _extent.Add(this);
+    }
+
+    public void AddChild(Zone childZone)
+    {
+        if (childZone == null)
+            throw new ArgumentNullException(nameof(childZone));
+        
+        if (ReferenceEquals(childZone, this))
+            throw new ArgumentException("A zone cannot be a child of itself.");
+        
+        if (childZone._parentZone != null)
+            throw new ArgumentException("This zone is already a child of another zone.");
+        
+        childZone.OpeningTime = this.OpeningTime;
+        childZone.ClosingTime = this.ClosingTime;
+        
+        childZone._parentZone = this;
+        _childZones.Add(childZone);
+    }
+
+    public void RemoveChild(Zone childZone)
+    {
+        if (!_childZones.Contains(childZone))
+            throw new InvalidOperationException("This zone is not a child of the current one.");
+        childZone.DeleteZone();
+        _childZones.Remove(childZone);
+    }
+
+    public void DeleteZone()
+    {
+        foreach (var childZone in _childZones.ToList())
+        {
+            childZone.DeleteZone();
+        }
+        _childZones.Clear();
+        _nextZone = null;
+        _parentZone?._childZones.Remove(this);
+        _parentZone = null;
+
+        _extent.Remove(this);
+    }
+
+    public void SetNextZone(Zone nextZone)
+    {
+        if (nextZone == null)
+            throw new ArgumentNullException(nameof(nextZone));
+        
+        if (ReferenceEquals(nextZone, this))
+            throw new ArgumentException("A zone cannot reference itself.");
+        
+        if (CreatesCycle(nextZone))
+            throw new InvalidOperationException("Cannot create a cycle in the zone chain.");
+        
+        _nextZone = nextZone;
+    }
+
+    private bool CreatesCycle(Zone zone)
+    {
+        Zone? currentZone = zone;
+        while (currentZone != null)
+        {
+            if (ReferenceEquals(currentZone, this))
+                return true;
+            currentZone = currentZone._nextZone;
+        }
+        return false;
+    }
+
+    public void ClearNextZone()
+    {
+        _nextZone = null;
     }
 }
