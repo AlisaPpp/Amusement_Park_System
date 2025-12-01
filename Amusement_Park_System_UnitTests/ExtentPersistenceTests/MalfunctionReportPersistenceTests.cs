@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            MalfunctionReport.Extent = new List<MalfunctionReport>();
+            MalfunctionReport.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            MalfunctionReport.Extent = new List<MalfunctionReport>();
+            MalfunctionReport.ClearExtent();
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             MalfunctionReport.Save();
 
-            MalfunctionReport.Extent = new List<MalfunctionReport>();
+            MalfunctionReport.ClearExtent();
             MalfunctionReport.Load();
 
             Assert.That(MalfunctionReport.Extent.Count, Is.EqualTo(2));

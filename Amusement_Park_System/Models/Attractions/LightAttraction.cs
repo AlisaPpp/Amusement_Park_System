@@ -4,10 +4,13 @@ namespace Amusement_Park_System;
 
 public class LightAttraction : Attraction
 {
-    public static List<LightAttraction> Extent = new();
+    private static List<LightAttraction> _extent = new();
+    public static IReadOnlyList<LightAttraction> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/lightAttractions.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
+    
     public static int MinimumHeightRequirement = 100;
     
     private bool _isParentSupervisionRequired;
@@ -23,6 +26,6 @@ public class LightAttraction : Attraction
         : base(name, height, maxSeats, vipPassWorks)
     {
        IsParentSupervisionRequired = isParentSupervisionRequired;
-       Extent.Add(this);
+       _extent.Add(this);
     }
 }

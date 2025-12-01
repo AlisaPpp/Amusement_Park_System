@@ -4,10 +4,12 @@ namespace Amusement_Park_System.Models;
 
 public class Customer
 {
-    public static List<Customer> Extent = new();
+    private static List<Customer> _extent = new();
+    public static IReadOnlyList<Customer> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/customers.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     private string _name = "";
     public string Name
     {
@@ -50,6 +52,6 @@ public class Customer
         Name = name;
         Surname = surname;
         ContactInfo = contactInfo;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

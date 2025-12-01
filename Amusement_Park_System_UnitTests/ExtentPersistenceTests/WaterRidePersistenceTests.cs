@@ -13,7 +13,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         {
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
-            WaterRide.Extent = new List<WaterRide>();
+            WaterRide.ClearExtent();
         }
 
         [TearDown]
@@ -21,7 +21,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         {
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
-            WaterRide.Extent = new List<WaterRide>();
+            WaterRide.ClearExtent();
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             WaterRide.Save();
 
-            WaterRide.Extent = new List<WaterRide>();
+            WaterRide.ClearExtent();
             WaterRide.Load();
 
             Assert.That(WaterRide.Extent.Count, Is.EqualTo(2));

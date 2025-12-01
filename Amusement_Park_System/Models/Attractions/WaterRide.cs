@@ -5,10 +5,12 @@ namespace Amusement_Park_System;
 public class WaterRide : Attraction
 {
     
-    public static List<WaterRide> Extent = new();
+    private static List<WaterRide> _extent = new();
+    public static IReadOnlyList<WaterRide> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/waterRides.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     
     private double _waterDepth;
     private double _waterTemperature;
@@ -36,6 +38,6 @@ public class WaterRide : Attraction
     {
         WaterDepth = waterDepth;
         WaterTemperature = waterTemperature;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

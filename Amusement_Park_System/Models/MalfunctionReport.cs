@@ -5,16 +5,18 @@ namespace Amusement_Park_System.Models;
 public class MalfunctionReport
 {
     
-    public static List<MalfunctionReport> Extent = new();
+    private static List<MalfunctionReport> _extent = new();
+    public static IReadOnlyList<MalfunctionReport> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/malfunctionReports.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     public MalfunctionReport(string type, string description, DateTime date)
     {
         Type = type;
         Description = description;
         Date = date;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 
     private string _type = "";

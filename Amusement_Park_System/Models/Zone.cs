@@ -8,10 +8,12 @@ using System.Collections.Generic;
 [Serializable]
 public class Zone
 {
-    public static List<Zone> Extent = new();
+    private static List<Zone> _extent = new();
+    public static IReadOnlyList<Zone> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/zones.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     
     private string _name;
     private string _theme;
@@ -64,6 +66,6 @@ public class Zone
         OpeningTime = openingTime;
         ClosingTime = closingTime;
         
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

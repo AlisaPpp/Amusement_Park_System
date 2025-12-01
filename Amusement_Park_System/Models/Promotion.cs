@@ -2,10 +2,12 @@ using Amusement_Park_System.Persistence;
 namespace Amusement_Park_System.Models;
 public class Promotion
 {
-    public static List<Promotion> Extent = new();
+    public static List<Promotion> _extent = new();
+    public static IReadOnlyList<Promotion> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/promotions.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     
     private string _name = "";
     public string Name
@@ -65,6 +67,6 @@ public class Promotion
         EndDate = endDate;
         PromotionPercent = promotionPercent;
         
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

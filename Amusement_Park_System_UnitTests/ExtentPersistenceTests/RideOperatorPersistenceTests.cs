@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            RideOperator.Extent = new List<RideOperator>();
+            RideOperator.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            RideOperator.Extent = new List<RideOperator>();
+            RideOperator.ClearExtent();
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             RideOperator.Save();
 
-            RideOperator.Extent = new List<RideOperator>();
+            RideOperator.ClearExtent();
             RideOperator.Load();
 
             Assert.That(RideOperator.Extent.Count, Is.EqualTo(2));

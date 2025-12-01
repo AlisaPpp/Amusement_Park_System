@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            RollerCoaster.Extent = new List<RollerCoaster>();
+            RollerCoaster.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            RollerCoaster.Extent = new List<RollerCoaster>();
+            RollerCoaster.ClearExtent();
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             RollerCoaster.Save();
 
-            RollerCoaster.Extent = new List<RollerCoaster>();
+            RollerCoaster.ClearExtent();
             RollerCoaster.Load();
 
             Assert.That(RollerCoaster.Extent.Count, Is.EqualTo(2));

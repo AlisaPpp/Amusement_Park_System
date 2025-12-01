@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Customer.Extent = new List<Customer>();
+            Customer.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Customer.Extent = new List<Customer>();
+            Customer.ClearExtent();
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             Customer.Save();
 
-            Customer.Extent = new List<Customer>();
+            Customer.ClearExtent();
             Customer.Load();
 
             Assert.That(Customer.Extent.Count, Is.EqualTo(2));

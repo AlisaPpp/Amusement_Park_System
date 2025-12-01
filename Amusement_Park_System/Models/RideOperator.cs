@@ -4,10 +4,12 @@ namespace Amusement_Park_System.Models;
 
 public class RideOperator : Employee
 {
-    public static List<RideOperator> Extent = new();
+    private static List<RideOperator> _extent = new();
+    public static IReadOnlyList<RideOperator> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/rideOperators.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     public RideOperator(
         string name,
         string surname,
@@ -20,7 +22,7 @@ public class RideOperator : Employee
     {
         OperatorLicenceId = operatorLicenceId;
         IsFirstAidCertified = isFirstAidCertified;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 
     private string _operatorLicenceId = "";

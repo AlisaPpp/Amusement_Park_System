@@ -7,11 +7,13 @@ using System;
 [Serializable]
 public class Shop
 {
-    public static List<Shop> Extent = new();
+    private static List<Shop> _extent = new();
+    public static IReadOnlyList<Shop> Extent => _extent.AsReadOnly();
     
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/shops.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     
     private string _name;
     private ShopType _type;
@@ -51,6 +53,6 @@ public class Shop
         Type = type;
         Location = location;
         
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

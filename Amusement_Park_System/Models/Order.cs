@@ -3,10 +3,12 @@ namespace Amusement_Park_System.Models;
 
 public class Order
 {
-    public static List<Order> Extent = new();
+    private static List<Order> _extent = new();
+    public static IReadOnlyList<Order> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/orders.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     public int Id { get; set; }
     
     private string _paymentMethod = "";
@@ -38,6 +40,6 @@ public class Order
         Id = id;
         PaymentMethod = paymentMethod;
         TotalPrice = totalPrice;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

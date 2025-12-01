@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            FourDRide.Extent = new List<FourDRide>();
+            FourDRide.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            FourDRide.Extent = new List<FourDRide>();
+            FourDRide.ClearExtent();
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             FourDRide.Save();
 
-            FourDRide.Extent = new List<FourDRide>();
+            FourDRide.ClearExtent();
             FourDRide.Load();
 
             Assert.That(FourDRide.Extent.Count, Is.EqualTo(2));

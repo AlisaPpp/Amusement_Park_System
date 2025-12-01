@@ -3,10 +3,12 @@ namespace Amusement_Park_System.Models;
 
 public class Shift
 {
-    public static List<Shift> Extent = new();
+    private static List<Shift> _extent = new();
+    public static IReadOnlyList<Shift> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/shifts.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     
     public Shift(DateTime date, DateTime startTime, DateTime endTime)
     {
@@ -14,7 +16,7 @@ public class Shift
         StartTime = startTime;
         EndTime = endTime; 
         
-        Extent.Add(this);
+        _extent.Add(this);
     }
 
     public DateTime Date { get; set; }

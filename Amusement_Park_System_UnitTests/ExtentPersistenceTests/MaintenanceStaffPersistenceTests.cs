@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            MaintenanceStaff.Extent = new List<MaintenanceStaff>();
+            MaintenanceStaff.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            MaintenanceStaff.Extent = new List<MaintenanceStaff>();
+            MaintenanceStaff.ClearExtent();
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             MaintenanceStaff.Save();
 
-            MaintenanceStaff.Extent = new List<MaintenanceStaff>();
+            MaintenanceStaff.ClearExtent();
             MaintenanceStaff.Load();
 
             Assert.That(MaintenanceStaff.Extent.Count, Is.EqualTo(2));

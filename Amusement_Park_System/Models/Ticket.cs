@@ -4,10 +4,12 @@ namespace Amusement_Park_System.Models;
 public class Ticket
 {
     
-    public static List<Ticket> Extent = new();
+    private static List<Ticket> _extent = new();
+    public static IReadOnlyList<Ticket> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/tickets.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     
     private DateTime _startDate;
     public DateTime StartDate
@@ -74,6 +76,6 @@ public class Ticket
         PersonalDiscount = personalDiscount;
         Quantity = quantity;
         Price = price;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

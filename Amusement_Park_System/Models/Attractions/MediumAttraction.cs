@@ -4,10 +4,13 @@ namespace Amusement_Park_System;
 
 public class MediumAttraction : Attraction
 {
-    public static List<MediumAttraction> Extent = new();
+    private static List<MediumAttraction> _extent = new();
+    public static IReadOnlyList<MediumAttraction> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/mediumAttractions.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
+    
     public const int MinimumHeightRequirement = 120;
     public const int MinimumAge = 8;
     
@@ -23,6 +26,6 @@ public class MediumAttraction : Attraction
         : base(name, height, maxSeats, vipPassWorks)
     {
         FamilyFriendly = familyFriendly;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

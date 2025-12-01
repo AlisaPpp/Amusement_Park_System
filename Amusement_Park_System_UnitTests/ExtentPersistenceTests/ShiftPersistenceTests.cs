@@ -15,7 +15,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Shift.Extent = new List<Shift>();
+            Shift.ClearExtent();
         }
 
         // after every test
@@ -25,7 +25,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Shift.Extent = new List<Shift>();
+            Shift.ClearExtent();
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
 
             Shift.Save();
 
-            Shift.Extent = new List<Shift>();
+            Shift.ClearExtent();
             Shift.Load();
 
             Assert.That(Shift.Extent.Count, Is.EqualTo(2));

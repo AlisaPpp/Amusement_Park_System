@@ -14,7 +14,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Promotion.Extent = new List<Promotion>();
+            Promotion.ClearExtent();
         }
 
         //after every test
@@ -24,7 +24,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            Promotion.Extent = new List<Promotion>();
+            Promotion.ClearExtent();
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var two = new Promotion("HalloweenSale", start2, end2, 30);
 
             Promotion.Save();
-            Promotion.Extent = new List<Promotion>();
+            Promotion.ClearExtent();
             Promotion.Load();
 
             Assert.That(Promotion.Extent.Count, Is.EqualTo(2));

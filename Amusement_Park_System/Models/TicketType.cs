@@ -4,10 +4,12 @@ namespace Amusement_Park_System.Models;
 
 public class TicketType
 {
-    public static List<TicketType> Extent = new();
+    private static List<TicketType> _extent = new();
+    public static IReadOnlyList<TicketType> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/ticketTypes.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
     private string _typeName = "";
     public string TypeName
     {
@@ -46,6 +48,6 @@ public class TicketType
         IsVip = isVip;
         InitialPrice = initialPrice;
         
-        Extent.Add(this);
+        _extent.Add(this);
     }
 }

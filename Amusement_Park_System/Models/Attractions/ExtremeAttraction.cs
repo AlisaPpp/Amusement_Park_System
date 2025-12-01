@@ -5,10 +5,13 @@ namespace Amusement_Park_System;
 [Serializable]
 public class ExtremeAttraction : Attraction
 {
-    public static List<ExtremeAttraction> Extent = new();
+    private static List<ExtremeAttraction> _extent = new();
+    public static IReadOnlyList<ExtremeAttraction> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/extremeAttractions.json"));
-    public static void Save() => ExtentManager.Save(Extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref Extent, FilePath);
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
+
     public static int MinimumAge = 12;
     public static int MinimumHeightRequirement = 140;
     
@@ -25,7 +28,7 @@ public class ExtremeAttraction : Attraction
         : base(name, height, maxSeats, vipPassWorks)
     {
         SafetyRestrictions = safetyRestrictions;
-        Extent.Add(this);
+        _extent.Add(this);
     }
 
 }

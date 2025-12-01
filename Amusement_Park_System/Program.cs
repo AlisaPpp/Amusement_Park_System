@@ -21,3 +21,5 @@ foreach (Promotion promotion in Promotion.Extent)
 {
     Console.WriteLine(promotion.Name);
 }
+
+Manager.Load();
