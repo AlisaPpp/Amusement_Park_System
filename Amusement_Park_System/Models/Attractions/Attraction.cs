@@ -1,4 +1,6 @@
-﻿namespace Amusement_Park_System;
+﻿using Amusement_Park_System.Models;
+
+namespace Amusement_Park_System;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,4 +66,56 @@ public abstract class Attraction
         VipPassWorks = vipPassWorks;
         
     }
+    
+    
+    private readonly HashSet<Shift> _shifts = new();
+
+    public IReadOnlyCollection<Shift> Shifts => _shifts.ToList().AsReadOnly();
+    
+    
+    public Shift AssignShift(Employee employee,
+        DateTime date,
+        DateTime startTime,
+        DateTime endTime)
+    {
+        if (employee == null) throw new ArgumentNullException(nameof(employee));
+
+        if (_shifts.Any(s =>
+                s.Employee  == employee &&
+                s.Date      == date.Date &&
+                s.StartTime == startTime &&
+                s.EndTime   == endTime))
+        {
+            throw new InvalidOperationException("This shift is already assigned for this attraction, employee and time.");
+        }
+        
+        var shift = Shift.Create(employee, this, date, startTime, endTime);
+        
+        _shifts.Add(shift);
+        employee.AddShiftFromAttraction(shift);
+
+        return shift;
+    }
+
+    public void RemoveShift(Shift shift)
+    {
+        if (shift == null) throw new ArgumentNullException(nameof(shift));
+        if (!_shifts.Contains(shift)) return;
+
+        _shifts.Remove(shift);
+        shift.Employee?.RemoveShiftInternal(shift);
+        shift.Delete();
+    }
+    
+    internal void AddShiftFromEmployee(Shift shift)
+    {
+        if (shift == null) throw new ArgumentNullException(nameof(shift));
+        _shifts.Add(shift);
+    }
+
+    internal void RemoveShiftInternal(Shift shift)
+    {
+        _shifts.Remove(shift);
+    }
+    
 }

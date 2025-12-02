@@ -9,15 +9,6 @@ public class Shift
     public static void Save() => ExtentManager.Save(_extent, FilePath);
     public static void Load() => ExtentManager.Load(ref _extent, FilePath);
     public static void ClearExtent() => _extent.Clear();
-    
-    public Shift(DateTime date, DateTime startTime, DateTime endTime)
-    {
-        Date = date.Date;
-        StartTime = startTime;
-        EndTime = endTime; 
-        
-        _extent.Add(this);
-    }
 
     public DateTime Date { get; set; }
     
@@ -39,4 +30,35 @@ public class Shift
             _endTime = value;
         }
     }
+    
+    
+    public Employee? Employee { get; private set; }
+    public Attraction? Attraction { get; private set; }
+    
+    private Shift(Employee employee, Attraction attraction,
+        DateTime date, DateTime startTime, DateTime endTime)
+    {
+        if (employee == null) throw new ArgumentNullException(nameof(employee));
+        if (attraction == null) throw new ArgumentNullException(nameof(attraction));
+
+        Employee   = employee;
+        Attraction = attraction;
+        Date       = date.Date;
+        StartTime  = startTime;
+        EndTime    = endTime;
+
+        _extent.Add(this);
+    }
+    
+    
+    internal static Shift Create(Employee employee, Attraction attraction,
+        DateTime date, DateTime startTime, DateTime endTime)
+        => new(employee, attraction, date, startTime, endTime);
+    internal void Delete()
+    {
+        Employee   = null;
+        Attraction = null;
+        _extent.Remove(this);
+    }
+    
 }
