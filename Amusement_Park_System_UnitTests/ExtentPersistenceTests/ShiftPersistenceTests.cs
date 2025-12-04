@@ -1,4 +1,4 @@
-
+using Amusement_Park_System;
 using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests.ExtentPersistanceTests
@@ -7,6 +7,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
     public class ShiftPersistenceTests
     {
         private string _filePath = Shift.FilePath;
+        private Employee employee;
+        private Attraction attraction;
 
         // before every test
         [SetUp]
@@ -16,6 +18,13 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
                 File.Delete(_filePath);
 
             Shift.ClearExtent();
+            
+            employee = new RideOperator(
+                "Test", "Employee", "test@example.com", 
+                new DateTime(1990, 1, 1), 3, "OP12345", true);
+            
+            attraction = new RollerCoaster(
+                "Test Coaster", 140, 24, true, 1200.5, 85.5, 3);
         }
 
         // after every test
@@ -31,12 +40,14 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void Constructor_AddsInstanceToExtent()
         {
-            var shift1 = new Shift(
+            var shift1 = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 1),
                 new DateTime(2026, 5, 1, 9, 0, 0),
                 new DateTime(2026, 5, 1, 17, 0, 0));
 
-            var shift2 = new Shift(
+            var shift2 = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 2),
                 new DateTime(2026, 5, 2, 10, 0, 0),
                 new DateTime(2026, 5, 2, 18, 0, 0));
@@ -49,7 +60,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void TestChangingPropertyUpdatesObjectInExtent()
         {
-            var shift = new Shift(
+            var shift = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 1),
                 new DateTime(2026, 5, 1, 9, 0, 0),
                 new DateTime(2026, 5, 1, 17, 0, 0));
@@ -64,7 +76,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void Save_CreatesFile()
         {
-            var shift = new Shift(
+            var shift = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 1),
                 new DateTime(2026, 5, 1, 9, 0, 0),
                 new DateTime(2026, 5, 1, 17, 0, 0));
@@ -78,12 +91,14 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void SaveThenLoad_RestoresExtent()
         {
-            var shift1 = new Shift(
+            var shift1 = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 1),
                 new DateTime(2026, 5, 1, 9, 0, 0),
                 new DateTime(2026, 5, 1, 17, 0, 0));
 
-            var shift2 = new Shift(
+            var shift2 = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 2),
                 new DateTime(2026, 5, 2, 10, 0, 0),
                 new DateTime(2026, 5, 2, 18, 0, 0));
@@ -110,7 +125,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            var shift = new Shift(
+            var shift = employee.AssignShift(
+                attraction,
                 new DateTime(2026, 5, 1),
                 new DateTime(2026, 5, 1, 9, 0, 0),
                 new DateTime(2026, 5, 1, 17, 0, 0));

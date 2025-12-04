@@ -1,13 +1,39 @@
-﻿using Amusement_Park_System.Models;
+﻿using Amusement_Park_System;
+using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests
 {
     public class ShiftTests
     {
-        private readonly Shift shift = new Shift(
-            new DateTime(2024, 1, 15),
-            new DateTime(2024, 1, 15, 9, 0, 0),
-            new DateTime(2024, 1, 15, 17, 0, 0));
+        private RideOperator rideOperator;
+        private RollerCoaster rollerCoaster;
+        private Shift shift;
+        private DateTime testDate;
+
+        [SetUp]
+        public void Setup()
+        {
+            Shift.ClearExtent();
+            RideOperator.ClearExtent();
+            RollerCoaster.ClearExtent();
+
+            testDate = new DateTime(2024, 1, 15);
+
+            // Create required objects first
+            rideOperator = new RideOperator(
+                "John", "Doe", "john@example.com",
+                new DateTime(1990, 1, 1), 3, "OP12345", true);
+
+            rollerCoaster = new RollerCoaster(
+                "Thunderbolt", 140, 24, true, 1200.5, 85.5, 3);
+
+            // Create shift through Employee's public method
+            shift = rideOperator.AssignShift(
+                rollerCoaster,
+                testDate,
+                new DateTime(2024, 1, 15, 9, 0, 0),
+                new DateTime(2024, 1, 15, 17, 0, 0));
+        }
 
         // Date Tests
         [Test]
@@ -19,12 +45,8 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftDateSetter()
         {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            testShift.Date = new DateTime(2024, 1, 16);
-            Assert.That(testShift.Date, Is.EqualTo(new DateTime(2024, 1, 16)));
+            shift.Date = new DateTime(2024, 1, 16);
+            Assert.That(shift.Date, Is.EqualTo(new DateTime(2024, 1, 16)));
         }
 
         // StartTime Tests
@@ -37,12 +59,8 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftStartTimeSetter()
         {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            testShift.StartTime = new DateTime(2024, 1, 15, 10, 0, 0);
-            Assert.That(testShift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 10, 0, 0)));
+            shift.StartTime = new DateTime(2024, 1, 15, 10, 0, 0);
+            Assert.That(shift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 10, 0, 0)));
         }
 
         // EndTime Tests
@@ -55,8 +73,17 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftEndTimeBeforeStartTimeException()
         {
-            Assert.Throws<ArgumentException>(() => new Shift(
-                new DateTime(2024, 1, 15),
+            // Create a new employee and attraction for this test
+            var tempOperator = new RideOperator(
+                "Test", "User", "test@example.com",
+                new DateTime(1990, 1, 1), 3, "OP99999", true);
+
+            var tempAttraction = new RollerCoaster(
+                "Test Coaster", 140, 24, true, 1000, 80, 2);
+
+            Assert.Throws<ArgumentException>(() => tempOperator.AssignShift(
+                tempAttraction,
+                testDate,
                 new DateTime(2024, 1, 15, 17, 0, 0),
                 new DateTime(2024, 1, 15, 9, 0, 0)));
         }
@@ -64,8 +91,16 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftEndTimeEqualStartTimeException()
         {
-            Assert.Throws<ArgumentException>(() => new Shift(
-                new DateTime(2024, 1, 15),
+            var tempOperator = new RideOperator(
+                "Test", "User", "test@example.com",
+                new DateTime(1990, 1, 1), 3, "OP99999", true);
+
+            var tempAttraction = new RollerCoaster(
+                "Test Coaster", 140, 24, true, 1000, 80, 2);
+
+            Assert.Throws<ArgumentException>(() => tempOperator.AssignShift(
+                tempAttraction,
+                testDate,
                 new DateTime(2024, 1, 15, 9, 0, 0),
                 new DateTime(2024, 1, 15, 9, 0, 0)));
         }
@@ -73,32 +108,20 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftEndTimeSetter()
         {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            testShift.EndTime = new DateTime(2024, 1, 15, 18, 0, 0);
-            Assert.That(testShift.EndTime, Is.EqualTo(new DateTime(2024, 1, 15, 18, 0, 0)));
+            shift.EndTime = new DateTime(2024, 1, 15, 18, 0, 0);
+            Assert.That(shift.EndTime, Is.EqualTo(new DateTime(2024, 1, 15, 18, 0, 0)));
         }
 
         [Test]
         public void TestShiftEndTimeSetterBeforeStartTimeException()
         {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            Assert.Throws<ArgumentException>(() => testShift.EndTime = new DateTime(2024, 1, 15, 8, 0, 0));
+            Assert.Throws<ArgumentException>(() => shift.EndTime = new DateTime(2024, 1, 15, 8, 0, 0));
         }
 
         [Test]
         public void TestShiftEndTimeSetterEqualStartTimeException()
         {
-            var testShift = new Shift(
-                new DateTime(2024, 1, 15),
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));
-            Assert.Throws<ArgumentException>(() => testShift.EndTime = new DateTime(2024, 1, 15, 9, 0, 0));
+            Assert.Throws<ArgumentException>(() => shift.EndTime = new DateTime(2024, 1, 15, 9, 0, 0));
         }
     }
 }
