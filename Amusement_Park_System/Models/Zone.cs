@@ -5,7 +5,6 @@ namespace Amusement_Park_System;
 using System;
 using System.Collections.Generic;
 
-[Serializable]
 public class Zone
 {
     private static List<Zone> _extent = new();
@@ -14,6 +13,7 @@ public class Zone
     public static void Save() => ExtentManager.Save(_extent, FilePath);
     public static void Load() => ExtentManager.Load(ref _extent, FilePath);
     public static void ClearExtent() => _extent.Clear();
+    public bool IsMainZone => ChildZones.Count > 0;
     
     private string _name;
     private string _theme;
@@ -26,6 +26,9 @@ public class Zone
     
     //reflex
     private Zone? _nextZone;
+    
+    //TicketType qualified
+    private HashSet<TicketType> _ticketTypes = new();
 
     public string Name
     {
@@ -68,6 +71,8 @@ public class Zone
     public Zone? ParentZone => _parentZone;
     public IReadOnlyCollection<Zone> ChildZones => _childZones;
     public Zone? NextZone => _nextZone;
+    public IReadOnlyCollection<TicketType> TicketTypes => _ticketTypes;
+    
 
     public Zone(string name, string theme, TimeSpan openingTime, TimeSpan closingTime)
     {
@@ -79,6 +84,7 @@ public class Zone
         _extent.Add(this);
     }
 
+    //COMPOSITION METHODS
     public void AddChild(Zone childZone)
     {
         if (childZone == null)
@@ -111,6 +117,7 @@ public class Zone
         {
             childZone.DeleteZone();
         }
+        
         _childZones.Clear();
         _nextZone = null;
         _parentZone?._childZones.Remove(this);
@@ -118,7 +125,8 @@ public class Zone
 
         _extent.Remove(this);
     }
-
+    
+    //REFLEX METHODS
     public void SetNextZone(Zone nextZone)
     {
         if (nextZone == null)
@@ -149,4 +157,16 @@ public class Zone
     {
         _nextZone = null;
     }
+    
+    //TicketType qualified association methods
+    internal void AddTicketType(TicketType ticketType)
+    {
+        _ticketTypes.Add(ticketType);
+    }
+
+    internal void RemoveTicketType(TicketType ticketType)
+    {
+        _ticketTypes.Remove(ticketType);
+    }
+    
 }

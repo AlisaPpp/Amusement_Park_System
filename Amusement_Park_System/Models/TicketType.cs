@@ -10,6 +10,10 @@ public class TicketType
     public static void Save() => ExtentManager.Save(_extent, FilePath);
     public static void Load() => ExtentManager.Load(ref _extent, FilePath);
     public static void ClearExtent() => _extent.Clear();
+    
+    private Dictionary<string, Zone> _accessibleZones = new();
+    public IReadOnlyDictionary<string, Zone> AccessibleZones => _accessibleZones;
+    
     private string _typeName = "";
     public string TypeName
     {
@@ -49,5 +53,40 @@ public class TicketType
         InitialPrice = initialPrice;
         
         _extent.Add(this);
+    }
+
+    public void AddZone(Zone zone)
+    {
+        if (zone == null)
+            throw new ArgumentNullException(nameof(zone));
+        if (_accessibleZones.ContainsKey(zone.Name))
+            throw new InvalidOperationException($"Zone '{zone.Name}' already added.");
+        if (!IsVip)
+        {
+            if (!zone.IsMainZone)
+                throw new InvalidOperationException($"Only main zones can be added to non-vip ticket types.");
+        }
+        _accessibleZones.Add(zone.Name, zone);
+        zone.AddTicketType(this);
+    }
+
+    public void RemoveZone(string zoneName)
+    {
+        if (!_accessibleZones.ContainsKey(zoneName))
+            throw new KeyNotFoundException($"Zone '{zoneName}' is not assigned to this ticket type.");
+        _accessibleZones.Remove(zoneName);
+        Zone zone = _accessibleZones[zoneName];
+        zone.RemoveTicketType(this);
+    }
+
+    public void IncludeAllZones(IEnumerable<Zone> zones)
+    {
+        if (!IsVip)
+            throw new InvalidOperationException($"Only VIP TicketTypes can include all zones");
+
+        foreach (var zone in zones)
+        {
+            _accessibleZones[zone.Name] = zone;
+        }
     }
 }
