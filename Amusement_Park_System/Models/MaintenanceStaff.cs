@@ -35,7 +35,20 @@ public class MaintenanceStaff : Employee
             _specialization = value.Trim();
         }
     }
-    
-    public List<string>? Certifications { get; set; }
+    private List<string>? _certifications = new();
+
+    public List<string>? Certifications
+    {
+        get => _certifications;
+        set
+        {
+            if (value != null)
+            {
+                if (value.Any(x => string.IsNullOrWhiteSpace(x))) 
+                    throw new ArgumentException("Certifications cannot be empty or whitespace.");
+            }
+            _certifications = value;
+        }
+    }
 
 }

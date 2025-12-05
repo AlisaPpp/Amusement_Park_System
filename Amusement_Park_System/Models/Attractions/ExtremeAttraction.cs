@@ -20,7 +20,15 @@ public class ExtremeAttraction : Attraction
     public List<string>? SafetyRestrictions 
     { 
         get => _safetyRestrictions;
-        set => _safetyRestrictions = value;
+        set
+        {
+            if (value != null)
+            {
+                if (value.Any(s => string.IsNullOrWhiteSpace(s)))
+                    throw new ArgumentException("The safety restrictions cannot be empty or whitespace.");
+            }
+            _safetyRestrictions = value;
+        }
     }
 
 

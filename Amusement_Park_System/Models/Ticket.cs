@@ -35,14 +35,17 @@ public class Ticket
         }
     }
 
-    private int _personalDiscount;
-    public int PersonalDiscount
+    private int? _personalDiscount;
+    public int? PersonalDiscount
     {
         get => _personalDiscount;
         set
         {
-            if (value < 0 || value > 100)
-                throw new ArgumentException("Personal discount must be between 0 and 100.");
+            if (value != null)
+            {
+                if (value < 0 || value > 100)
+                    throw new ArgumentException("Personal discount must be between 0 and 100.");
+            }
             _personalDiscount = value;
         }
     }
