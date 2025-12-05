@@ -53,6 +53,10 @@ public class TicketType
         InitialPrice = initialPrice;
         
         _extent.Add(this);
+        if (IsVip)
+        {
+            IncludeAllZones(Zone.Extent);
+        }
     }
 
     public void AddZone(Zone zone)
@@ -61,10 +65,9 @@ public class TicketType
             throw new ArgumentNullException(nameof(zone));
         if (_accessibleZones.ContainsKey(zone.Name))
             throw new InvalidOperationException($"Zone '{zone.Name}' already added.");
-        if (!IsVip)
+        if (!IsVip && !zone.IsMainZone)
         {
-            if (!zone.IsMainZone)
-                throw new InvalidOperationException($"Only main zones can be added to non-vip ticket types.");
+            throw new InvalidOperationException($"Only main zones can be added to non-vip ticket types.");
         }
         _accessibleZones.Add(zone.Name, zone);
         zone.AddTicketType(this);
@@ -74,9 +77,9 @@ public class TicketType
     {
         if (!_accessibleZones.ContainsKey(zoneName))
             throw new KeyNotFoundException($"Zone '{zoneName}' is not assigned to this ticket type.");
-        _accessibleZones.Remove(zoneName);
         Zone zone = _accessibleZones[zoneName];
         zone.RemoveTicketType(this);
+        _accessibleZones.Remove(zoneName);
     }
 
     public void IncludeAllZones(IEnumerable<Zone> zones)
@@ -87,6 +90,7 @@ public class TicketType
         foreach (var zone in zones)
         {
             _accessibleZones[zone.Name] = zone;
+            zone.AddTicketType(this);
         }
     }
 }
