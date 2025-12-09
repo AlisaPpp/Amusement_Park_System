@@ -69,30 +69,13 @@ public abstract class Employee
         
         private readonly HashSet<Shift> _shifts = new();
         
-        public IReadOnlyCollection<Shift> Shifts => _shifts.ToList().AsReadOnly();
+        public IReadOnlyCollection<Shift> Shifts => _shifts;
 
         public Shift AssignShift(Attraction attraction,
-            DateTime date,
-            DateTime startTime,
-            DateTime endTime)
+            Shift shift)
         {
             if (attraction == null) throw new ArgumentNullException(nameof(attraction));
-
-            if (_shifts.Any(s =>
-                    s.Attraction == attraction &&
-                    s.Date       == date.Date &&
-                    s.StartTime  == startTime &&
-                    s.EndTime    == endTime))
-            {
-                throw new InvalidOperationException("This shift is already assigned to this employee for this attraction and time.");
-            }
-
-            
-            var shift = Shift.Create(this, attraction, date, startTime, endTime);
-
             _shifts.Add(shift);
-            attraction.AddShiftFromEmployee(shift);
-
             return shift;
         }
         

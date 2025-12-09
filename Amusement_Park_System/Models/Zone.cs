@@ -159,14 +159,28 @@ public class Zone
     }
     
     //TicketType qualified association methods
-    internal void AddTicketType(TicketType ticketType)
+    public void AddTicketType(TicketType ticketType)
     {
+        if (ticketType == null)
+            throw new ArgumentNullException(nameof(ticketType));
+        if(_ticketTypes.Contains(ticketType))
+            return;
         _ticketTypes.Add(ticketType);
+        if (!ticketType.AccessibleZones.ContainsKey(Name))
+            ticketType.AddZoneInternal(this);
     }
 
     internal void RemoveTicketType(TicketType ticketType)
     {
+        if (ticketType == null)
+            throw new ArgumentNullException(nameof(ticketType));
+
+        if (!_ticketTypes.Contains(ticketType))
+            return;
+
         _ticketTypes.Remove(ticketType);
+
+        if (ticketType.AccessibleZones.ContainsKey(Name))
+            ticketType.RemoveZoneInternal(Name);
     }
-    
 }

@@ -93,4 +93,14 @@ public class TicketType
             zone.AddTicketType(this);
         }
     }
+    
+    internal void AddZoneInternal(Zone zone)
+    {
+        _accessibleZones[zone.Name] = zone;
+    }
+
+    internal void RemoveZoneInternal(string zoneName)
+    {
+        _accessibleZones.Remove(zoneName);
+    }
 }

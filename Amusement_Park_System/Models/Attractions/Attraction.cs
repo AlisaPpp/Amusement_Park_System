@@ -70,7 +70,7 @@ public abstract class Attraction
     
     private readonly HashSet<Shift> _shifts = new();
 
-    public IReadOnlyCollection<Shift> Shifts => _shifts.ToList().AsReadOnly();
+    public IReadOnlyCollection<Shift> Shifts => _shifts;
     
     
     public Shift AssignShift(Employee employee,
@@ -92,7 +92,7 @@ public abstract class Attraction
         var shift = Shift.Create(employee, this, date, startTime, endTime);
         
         _shifts.Add(shift);
-        employee.AddShiftFromAttraction(shift);
+        employee.AssignShift(this, shift);
 
         return shift;
     }
