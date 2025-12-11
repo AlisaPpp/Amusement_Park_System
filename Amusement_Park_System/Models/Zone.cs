@@ -197,12 +197,7 @@ public class Zone
         if (_shops.Contains(shop))
             return;
         
-        shop.ReassignZone(this);
-    }
-
-    public void MoveShop(Shop shop)
-    {
-        AddShop(shop);
+        shop.AssignZone(this);
     }
     
     internal void AddShopInternal(Shop shop)
