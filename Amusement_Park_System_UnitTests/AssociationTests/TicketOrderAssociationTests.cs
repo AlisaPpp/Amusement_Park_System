@@ -101,6 +101,16 @@ namespace Amusement_Park_System_Tests
             Assert.That(Ticket.Extent, Does.Not.Contain(ticket));
         }
         
+        [Test]
+        public void TestTotalPriceCalculatesFromTickets()
+        {
+            var ticket1 = new Ticket(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2), 0, 1, type, order);
+            var ticket2 = new Ticket(DateTime.Now.AddDays(2), DateTime.Now.AddDays(3), 10, 2, type, order);
+
+            decimal expectedTotal = (100m * 1) + (90m * 2);
+            Assert.AreEqual(expectedTotal, order.TotalPrice);
+        }
+        
 
         [Test]
         public void TestTotalPriceZeroWhenNoTickets()

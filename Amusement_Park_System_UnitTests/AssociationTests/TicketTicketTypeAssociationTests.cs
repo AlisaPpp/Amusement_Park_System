@@ -100,6 +100,16 @@ namespace Amusement_Park_System_Tests
             Assert.That(Ticket.Extent, Does.Not.Contain(ticket));
         }
         
+        [Test]
+        public void TestPriceCalculationUsesTicketTypePrice()
+        {
+            var ticket = new Ticket(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2), 0, 1, type1, order);
+            Assert.That(ticket.Price, Is.EqualTo(100m));
+
+            var ticket2 = new Ticket(DateTime.Now.AddDays(1), DateTime.Now.AddDays(2), 0, 1, type2, order);
+            Assert.That(ticket2.Price, Is.EqualTo(200m));
+        }
+        
 
         [Test]
         public void TestTicketTypeProperty()
