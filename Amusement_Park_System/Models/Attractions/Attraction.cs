@@ -67,49 +67,17 @@ public abstract class Attraction
         
     }
     
-    
+    //shift association
     private readonly HashSet<Shift> _shifts = new();
+    public IReadOnlyCollection<Shift> Shifts => _shifts.ToList().AsReadOnly();
 
-    public IReadOnlyCollection<Shift> Shifts => _shifts;
-    
-    
-    public Shift AssignShift(Employee employee,
-        DateTime date,
-        DateTime startTime,
-        DateTime endTime)
+    internal void AddShiftInternal(Shift shift)
     {
-        if (employee == null) throw new ArgumentNullException(nameof(employee));
-
-        if (_shifts.Any(s =>
-                s.Employee  == employee &&
-                s.Date      == date.Date &&
-                s.StartTime == startTime &&
-                s.EndTime   == endTime))
+        if (_shifts.Contains(shift))
         {
-            throw new InvalidOperationException("This shift is already assigned for this attraction, employee and time.");
+            return;
         }
         
-        var shift = Shift.Create(employee, this, date, startTime, endTime);
-        
-        _shifts.Add(shift);
-        employee.AssignShift(this, shift);
-
-        return shift;
-    }
-
-    public void RemoveShift(Shift shift)
-    {
-        if (shift == null) throw new ArgumentNullException(nameof(shift));
-        if (!_shifts.Contains(shift)) return;
-
-        _shifts.Remove(shift);
-        shift.Employee?.RemoveShiftInternal(shift);
-        shift.Delete();
-    }
-    
-    internal void AddShiftFromEmployee(Shift shift)
-    {
-        if (shift == null) throw new ArgumentNullException(nameof(shift));
         _shifts.Add(shift);
     }
 
@@ -117,5 +85,7 @@ public abstract class Attraction
     {
         _shifts.Remove(shift);
     }
+
+
     
 }

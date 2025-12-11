@@ -67,31 +67,16 @@ public abstract class Employee
             }
         }
         
+        //shift association
         private readonly HashSet<Shift> _shifts = new();
-        
-        public IReadOnlyCollection<Shift> Shifts => _shifts;
+        public IReadOnlyCollection<Shift> Shifts => _shifts.ToList().AsReadOnly();
 
-        public Shift AssignShift(Attraction attraction,
-            Shift shift)
+        internal void AddShiftInternal(Shift shift)
         {
-            if (attraction == null) throw new ArgumentNullException(nameof(attraction));
-            _shifts.Add(shift);
-            return shift;
-        }
-        
-        public void RemoveShift(Shift shift)
-        {
-            if (shift == null) throw new ArgumentNullException(nameof(shift));
-            if (!_shifts.Contains(shift)) return;
-
-            _shifts.Remove(shift);
-            shift.Attraction?.RemoveShiftInternal(shift);
-            shift.Delete();
-        }
-        
-        internal void AddShiftFromAttraction(Shift shift)
-        {
-            if (shift == null) throw new ArgumentNullException(nameof(shift));
+            if (_shifts.Contains(shift))
+            {
+                return;
+            }
             _shifts.Add(shift);
         }
 
@@ -99,5 +84,20 @@ public abstract class Employee
         {
             _shifts.Remove(shift);
         }
+
+        //manager association
+        private Manager? _manager;
+        public Manager? Manager => _manager;
+
+        internal void SetManagerInternal(Manager? manager)
+        {
+            _manager = manager;
+        }
+        
+        internal void RemoveManagerInternal()
+        {
+            _manager = null;
+        }
+   
         
     }

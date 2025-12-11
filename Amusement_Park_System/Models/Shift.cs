@@ -12,15 +12,15 @@ public class Shift
 
     public DateTime Date { get; set; }
     
-    private DateTime _startTime;
-    public DateTime StartTime 
+    private TimeSpan _startTime;
+    public TimeSpan StartTime 
     { 
         get => _startTime;
         set => _startTime = value;
     }
     
-    private DateTime _endTime;
-    public DateTime EndTime 
+    private TimeSpan _endTime;
+    public TimeSpan EndTime 
     { 
         get => _endTime;
         set
@@ -32,33 +32,89 @@ public class Shift
     }
     
     
-    public Employee? Employee { get; private set; }
-    public Attraction? Attraction { get; private set; }
-    
-    private Shift(Employee employee, Attraction attraction,
-        DateTime date, DateTime startTime, DateTime endTime)
-    {
-        if (employee == null) throw new ArgumentNullException(nameof(employee));
-        if (attraction == null) throw new ArgumentNullException(nameof(attraction));
+    private Employee _employee = null!;
+    private Attraction _attraction = null!;
+    private Manager _manager = null!;
 
-        Employee   = employee;
-        Attraction = attraction;
-        Date       = date.Date;
-        StartTime  = startTime;
-        EndTime    = endTime;
+    public Employee Employee => _employee;
+    public Attraction Attraction => _attraction;
+    public Manager Manager => _manager;
+    
+    
+    public Shift(
+        DateTime date,
+        TimeSpan start,
+        TimeSpan end,
+        Employee employee,
+        Attraction attraction,
+        Manager manager)
+    {
+        Date = date;
+        StartTime = start;
+        EndTime = end;
+
+        AssignEmployee(employee);
+        AssignAttraction(attraction);
+        AssignManager(manager);
 
         _extent.Add(this);
     }
     
     
-    internal static Shift Create(Employee employee, Attraction attraction,
-        DateTime date, DateTime startTime, DateTime endTime)
-        => new(employee, attraction, date, startTime, endTime);
-    internal void Delete()
+    private void AssignEmployee(Employee employee)
     {
-        Employee   = null;
-        Attraction = null;
+        if (employee == null)
+            throw new ArgumentNullException(nameof(employee));
+        
+        if (_employee != null!)
+        {
+            _employee.RemoveShiftInternal(this);
+        }
+
+        _employee = employee;
+        employee.AddShiftInternal(this);
+    }
+
+    private void AssignAttraction(Attraction attraction)
+    {
+        if (attraction == null)
+            throw new ArgumentNullException(nameof(attraction));
+
+        if (_attraction != null!)
+        {
+            _attraction.RemoveShiftInternal(this);
+        }
+
+        _attraction = attraction;
+        attraction.AddShiftInternal(this);
+    }
+
+    private void AssignManager(Manager manager)
+    {
+        if (manager == null)
+            throw new ArgumentNullException(nameof(manager));
+
+        // Manager can only assign shifts to employees he manages
+        if (!manager.ManagesEmployee(_employee))
+            throw new InvalidOperationException("Manager cannot assign a shift to an employee he does not manage.");
+
+        if (_manager != null!)
+        {
+            _manager.RemoveShiftInternal(this);
+        }
+
+        _manager = manager;
+        manager.AddShiftInternal(this);
+    }
+    
+    public void Delete()
+    {
+        Employee.RemoveShiftInternal(this);
+        Attraction.RemoveShiftInternal(this);
+        Manager.RemoveShiftInternal(this);
+
         _extent.Remove(this);
     }
+    
     
 }
