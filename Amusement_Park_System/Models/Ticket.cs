@@ -63,22 +63,61 @@ public class Ticket
     private decimal _price;
     public decimal Price
     {
-        get => _price;
-        set
+        get
         {
-            if (value < 0)
-                throw new ArgumentException("Price cannot be less than 0.");
-            _price = value;
+            decimal basePrice = _ticketType.InitialPrice;
+
+            decimal promoPct = _ticketType.Promotion?.PromotionPercent ?? 0m;  
+            decimal personalDiscount = PersonalDiscount ?? 0m;                
+
+            decimal promoFactor = 1m - (promoPct / 100m);
+            decimal personalFactor = 1m - (personalDiscount / 100m);
+
+            return Math.Round(basePrice * promoFactor * personalFactor, 2);
         }
     }
     
-    public Ticket(DateTime startDate, DateTime endDate, int personalDiscount, int quantity, decimal price)
+    private TicketType _ticketType;
+    private Order _order;
+
+    public TicketType TicketType => _ticketType;
+    public Order Order => _order;
+    
+    public Ticket(DateTime startDate, DateTime endDate, int? personalDiscount, int quantity, TicketType ticketType, Order order)
     {
         StartDate = startDate;
         EndDate = endDate;
         PersonalDiscount = personalDiscount;
         Quantity = quantity;
-        Price = price;
+        AssignTicketType(ticketType);
+        AssignOrder(order);
         _extent.Add(this);
+        
+    }
+
+    private void AssignTicketType(TicketType ticketType)
+    {
+        if (ticketType == null)
+            throw new ArgumentNullException(nameof(ticketType));
+        _ticketType.RemoveTicketInternal(this);
+        _ticketType = ticketType;
+        ticketType.AddTicketInternal(this);
+    }
+
+    private void AssignOrder(Order order)
+    {
+        if (order == null)
+            throw new ArgumentNullException(nameof(order));
+        if (_order != null)
+            _order.RemoveTicketInternal(this);
+        _order = order;
+        order.AddTicketInternal(this);
+    }
+
+    public void Delete()
+    {
+        _ticketType.RemoveTicketInternal(this);
+        _order.RemoveTicketInternal(this);
+        _extent.Remove(this);
     }
 }

@@ -2,7 +2,7 @@ using Amusement_Park_System.Persistence;
 namespace Amusement_Park_System.Models;
 public class Promotion
 {
-    public static List<Promotion> _extent = new();
+    private static List<Promotion> _extent = new();
     public static IReadOnlyList<Promotion> Extent => _extent.AsReadOnly();
     public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/promotions.json"));
     public static void Save() => ExtentManager.Save(_extent, FilePath);
@@ -59,7 +59,7 @@ public class Promotion
             _promotionPercent = value;
         }
     }
-
+    
     public Promotion(string name, DateTime startDate, DateTime endDate, int promotionPercent)
     {
         Name = name;
@@ -69,4 +69,57 @@ public class Promotion
         
         _extent.Add(this);
     }
+    
+    //TicketType association
+    private HashSet<TicketType> _ticketTypes = new();
+    public IReadOnlyCollection<TicketType> TicketTypes => _ticketTypes;
+    public bool IsExpired => EndDate < DateTime.Now.Date;
+    
+    public void AddTicketType(TicketType ticketType)
+    {
+        if (ticketType == null)
+            throw new ArgumentNullException(nameof(ticketType));
+        if (_ticketTypes.Contains(ticketType)) 
+            return;
+        _ticketTypes.Add(ticketType);
+        ticketType.AssignPromotionInternal(this);
+    }
+
+    public void RemoveTicketType(TicketType ticketType)
+    {
+        if (ticketType == null)
+            throw new ArgumentNullException(nameof(ticketType));
+        if (!_ticketTypes.Contains(ticketType))
+            return;
+        _ticketTypes.Remove(ticketType);
+        ticketType.RemovePromotionInternal();
+    }
+    
+    internal void AddTicketTypeInternal(TicketType ticketType)
+    {
+        _ticketTypes.Add(ticketType);
+    }
+
+    internal void RemoveTicketTypeInternal(TicketType ticketType)
+    {
+        _ticketTypes.Remove(ticketType);
+    }
+    
+    public void Delete()
+    {
+        foreach (var ticketType in _ticketTypes.ToList())
+            ticketType.RemovePromotionInternal();
+
+        _ticketTypes.Clear();
+        _extent.Remove(this);
+    }
+    
+    public static void RemoveExpiredPromotions()
+    {
+        var expiredPromos = _extent.Where(p => p.IsExpired).ToList();
+
+        foreach (var promo in expiredPromos)
+            promo.Delete();
+    }
+    
 }

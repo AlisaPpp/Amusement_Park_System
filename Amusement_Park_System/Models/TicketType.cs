@@ -14,6 +14,7 @@ public class TicketType
     private Dictionary<string, Zone> _accessibleZones = new();
     public IReadOnlyDictionary<string, Zone> AccessibleZones => _accessibleZones;
     
+    
     private string _typeName = "";
     public string TypeName
     {
@@ -103,4 +104,49 @@ public class TicketType
     {
         _accessibleZones.Remove(zoneName);
     }
+    
+    //Ticket association
+    private readonly HashSet<Ticket> _tickets = new();
+    public IReadOnlyCollection<Ticket> Tickets => _tickets;
+    internal void AddTicketInternal(Ticket ticket)
+    {
+        if (_tickets.Contains(ticket))
+            return;
+        _tickets.Add(ticket);
+    }
+    internal void RemoveTicketInternal(Ticket ticket) => _tickets.Remove(ticket);
+    
+    //Promotion association
+    private Promotion? _promotion;
+    public Promotion? Promotion
+    {
+        get
+        {
+            if (_promotion != null && _promotion.IsExpired)
+            {
+                _promotion.Delete();
+                _promotion = null;
+            }
+            return _promotion;
+        }
+    }
+
+    public void AssignPromotion(Promotion? promotion)
+    {
+        if (_promotion == promotion) return;
+        _promotion?.RemoveTicketTypeInternal(this);
+        _promotion = promotion;
+        promotion?.AddTicketTypeInternal(this);
+    }
+    
+    internal void AssignPromotionInternal(Promotion? promotion)
+    {
+        _promotion = promotion;
+    }
+
+    internal void RemovePromotionInternal()
+    {
+        _promotion = null;
+    }
+    
 }

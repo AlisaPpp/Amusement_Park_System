@@ -9,6 +9,16 @@ public class Order
     public static void Save() => ExtentManager.Save(_extent, FilePath);
     public static void Load() => ExtentManager.Load(ref _extent, FilePath);
     public static void ClearExtent() => _extent.Clear();
+    
+    public Order(int id, string paymentMethod, Customer customer)
+    {
+        Id = id;
+        PaymentMethod = paymentMethod;
+        _extent.Add(this);
+        
+        Customer = customer ?? throw new ArgumentNullException(nameof(customer));
+        customer.AddOrderInternal(this);
+    }
     public int Id { get; set; }
     
     private string _paymentMethod = "";
@@ -24,22 +34,32 @@ public class Order
     }
     private decimal _totalPrice;
 
-    public decimal TotalPrice
+    public decimal TotalPrice => Tickets.Sum(ticket => ticket.Price * ticket.Quantity);
+    
+    //Ticket association
+    private readonly HashSet<Ticket> _tickets = new();
+    public IReadOnlyCollection<Ticket> Tickets => _tickets;
+
+    internal void AddTicketInternal(Ticket ticket)
     {
-        get => _totalPrice;
-        set
-        {
-            if (value < 0)
-                throw new ArgumentException("Total Price cannot be negative.");
-            _totalPrice = value;
-        }
+        if (_tickets.Contains(ticket))
+            return;
+        _tickets.Add(ticket);
+    }
+    internal void RemoveTicketInternal(Ticket ticket) => _tickets.Remove(ticket);
+    
+    //Customer association
+    public Customer Customer { get; private set; }
+    internal void RemoveCustomerInternal()
+    {
+        Customer = null!;   
     }
 
-    public Order(int id, string paymentMethod, decimal totalPrice)
+    internal static void Delete(Order order)
     {
-        Id = id;
-        PaymentMethod = paymentMethod;
-        TotalPrice = totalPrice;
-        _extent.Add(this);
+        order.Customer.RemoveOrderInternal(order);
+        order.Customer = null!;
+        _extent.Remove(order);
     }
+    
 }

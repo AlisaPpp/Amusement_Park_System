@@ -54,4 +54,36 @@ public class Customer
         ContactInfo = contactInfo;
         _extent.Add(this);
     }
+    
+    //Order association
+    private readonly HashSet<Order> _orders = new();
+    public IReadOnlyCollection<Order> Orders => _orders;
+
+    public Order CreateOrder(int id, string paymentMethod)
+    {
+        return new Order(id, paymentMethod, this);
+    }
+    
+    public void DeleteOrder(Order order)
+    {
+        if (!_orders.Contains(order))
+            throw new InvalidOperationException("The order does not belong to this customer.");
+
+        RemoveOrderInternal(order);
+        order.RemoveCustomerInternal();
+        Order.Delete(order);
+    }
+    
+    internal void AddOrderInternal(Order order)
+    {
+        if (!_orders.Contains(order))
+            _orders.Add(order);
+    }
+
+    internal void RemoveOrderInternal(Order order)
+    {
+        if (!_orders.Contains(order))
+            _orders.Remove(order);
+    }
+    
 }
