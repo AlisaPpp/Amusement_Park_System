@@ -18,6 +18,9 @@ public class Shop
     private string _name;
     private ShopType _type;
     private string _location;
+    
+    private Zone _zone = null!;
+    public Zone Zone => _zone;
 
     public string Name 
     { 
@@ -47,12 +50,42 @@ public class Shop
         }
     }
 
-    public Shop(string name, ShopType type, string location)
+    public Shop(string name, ShopType type, string location, Zone zone)
     {
         Name = name;
         Type = type;
         Location = location;
+        AssignZone(zone);
         
         _extent.Add(this);
     }
+    
+    //zone association
+    
+    private void AssignZone(Zone newZone)
+    {
+        
+        if (newZone == null)
+            throw new ArgumentNullException(nameof(newZone));
+        if (_zone != null!)
+        {
+            _zone.RemoveShopInternal(this);
+        }
+
+        _zone = newZone;
+        newZone.AddShopInternal(this);
+    }
+
+    
+    public void ReassignZone(Zone newZone)
+    {
+        if (newZone == null)
+            throw new ArgumentNullException(nameof(newZone));
+
+        if (ReferenceEquals(newZone, _zone))
+            return;
+
+        AssignZone(newZone);
+    }
+    
 }

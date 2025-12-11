@@ -183,4 +183,35 @@ public class Zone
         if (ticketType.AccessibleZones.ContainsKey(Name))
             ticketType.RemoveZoneInternal(Name);
     }
+    
+    //shop association
+    
+    private readonly HashSet<Shop> _shops = new();
+    public IReadOnlyCollection<Shop> Shops => _shops.ToList().AsReadOnly();
+    
+    public void AddShop(Shop shop)
+    {
+        if (shop == null)
+            throw new ArgumentNullException(nameof(shop));
+
+        if (_shops.Contains(shop))
+            return;
+        
+        shop.ReassignZone(this);
+    }
+
+    public void MoveShop(Shop shop)
+    {
+        AddShop(shop);
+    }
+    
+    internal void AddShopInternal(Shop shop)
+    {
+        _shops.Add(shop);
+    }
+
+    internal void RemoveShopInternal(Shop shop)
+    {
+        _shops.Remove(shop);
+    }
 }
