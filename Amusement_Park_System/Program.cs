@@ -7,12 +7,12 @@ Promotion promo3 = new Promotion("EasterSale", DateTime.Parse("2026-01-08"), Dat
 
 Promotion.Save();
 
-Order order = new Order(3, "someMethod", 40);
-Order order2 = new Order(2, "someMethod", 30);
+//Order order = new Order(3, "someMethod", 40);
+//Order order2 = new Order(2, "someMethod", 30);
 
 Order.Save();
 
-Ticket ticket1 = new Ticket(DateTime.Parse("2026-11-15"), DateTime.Parse("2026-12-21"), 25, 2, 1500);
+//Ticket ticket1 = new Ticket(DateTime.Parse("2026-11-15"), DateTime.Parse("2026-12-21"), 25, 2, 1500);
 
 Ticket.Save();
 Promotion.Load();

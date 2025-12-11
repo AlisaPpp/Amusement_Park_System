@@ -82,7 +82,7 @@ public class Customer
 
     internal void RemoveOrderInternal(Order order)
     {
-        if (!_orders.Contains(order))
+        if (_orders.Contains(order))
             _orders.Remove(order);
     }
     
