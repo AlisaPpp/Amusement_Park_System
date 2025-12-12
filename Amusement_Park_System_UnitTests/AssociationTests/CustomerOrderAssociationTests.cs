@@ -130,7 +130,7 @@ namespace Amusement_Park_System_Tests
         {
             var order = customer.CreateOrder(7, "Card");
 
-            customer.DeleteOrder(order); // instead of Order.Delete(order)
+            customer.DeleteOrder(order); 
 
             Assert.That(order.Customer, Is.Null);
             Assert.That(customer.Orders, Does.Not.Contain(order));
