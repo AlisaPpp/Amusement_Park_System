@@ -48,8 +48,8 @@ public class RollerCoaster : Attraction
         }
     }
 
-    public RollerCoaster(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone,
-        double trackLength, double maxSpeed, int numberOfLoops)
+    public RollerCoaster(string name, int height, int maxSeats, bool vipPassWorks,
+        double trackLength, double maxSpeed, int numberOfLoops, Zone? zone)
         : base(name, height, maxSeats, vipPassWorks, zone)
     {
         TrackLength = trackLength;

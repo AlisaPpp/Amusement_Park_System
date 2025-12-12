@@ -22,7 +22,8 @@ public class LightAttraction : Attraction
     }
     
 
-    public LightAttraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, bool isParentSupervisionRequired )
+    public LightAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool isParentSupervisionRequired, 
+        Zone? zone = null)
         : base(name, height, maxSeats, vipPassWorks, zone)
     {
        IsParentSupervisionRequired = isParentSupervisionRequired;

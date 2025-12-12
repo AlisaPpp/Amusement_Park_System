@@ -32,7 +32,8 @@ public class ExtremeAttraction : Attraction
     }
 
 
-    public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, List<string>? safetyRestrictions )
+    public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks, 
+        List<string>? safetyRestrictions, Zone? zone = null)
         : base(name, height, maxSeats, vipPassWorks, zone)
     {
         SafetyRestrictions = safetyRestrictions;
