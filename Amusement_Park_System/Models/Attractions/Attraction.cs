@@ -113,4 +113,15 @@ public abstract class Attraction
         _zone = null;
     }
     
+    //malfunction report association
+    private HashSet<MalfunctionReport> _reports = new();
+    public IReadOnlyCollection<MalfunctionReport> Reports => _reports;
+
+    internal void AddReportInternal(MalfunctionReport report)
+    {
+        if (report == null) 
+            throw new ArgumentNullException(nameof(report));
+        _reports.Add(report);
+    }
+
 }

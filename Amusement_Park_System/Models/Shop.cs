@@ -50,7 +50,7 @@ public class Shop
         }
     }
 
-    public Shop(string name, ShopType type, string location, Zone? zone)
+    public Shop(string name, ShopType type, string location, Zone? zone = null)
     {
         Name = name;
         Type = type;
