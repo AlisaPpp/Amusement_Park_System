@@ -87,6 +87,10 @@ public abstract class Attraction
 
     internal void RemoveShiftInternal(Shift shift)
     {
+        if (!_shifts.Contains(shift))
+        {
+            return;
+        }
         _shifts.Remove(shift);
     }
     
