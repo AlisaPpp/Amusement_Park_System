@@ -8,6 +8,9 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
     public class TicketPersistenceTests
     {
         private string _filePath = Ticket.FilePath;
+        private Customer customer;
+        private TicketType ticketType;
+        private Order order;
 
         // before each test
         [SetUp]
@@ -17,6 +20,9 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
                 File.Delete(_filePath);
 
             Ticket.ClearExtent();
+            customer = new Customer("John", "Doe", "john@example.com");
+            order = new Order(1, "Credit Card", customer);
+            ticketType = new TicketType("Regular", false, 50m);
         }
 
         // after each test
@@ -32,8 +38,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void Constructor_AddsInstanceToExtent()
         {
-            var t1 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, 50m);
-            var t2 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 20, 5, 120m);
+            var t1 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, ticketType, order);
+            var t2 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 20, 5, ticketType, order);
 
             Assert.That(Ticket.Extent.Count, Is.EqualTo(2));
             Assert.That(Ticket.Extent, Does.Contain(t1));
@@ -43,7 +49,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void TestChangingPropertyUpdatesObjectInExtent()
         {
-            var t = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, 50m);
+            var t = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, ticketType, order);
 
             var fromExtent = Ticket.Extent.Single(x => x.StartDate == t.StartDate);
 
@@ -55,7 +61,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void Save_CreatesFile()
         {
-            var t = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, 50m);
+            var t = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, ticketType, order);
 
             Ticket.Save();
 
@@ -66,8 +72,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void SaveThenLoad_RestoresExtent()
         {
-            var t1 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"),10, 2, 50m);
-            var t2 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 20, 4, 100m);
+            var t1 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"),10, 2, ticketType, order);
+            var t2 = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 20, 4, ticketType, order);
 
             Ticket.Save();
 
@@ -95,7 +101,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            var t = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, 50m);
+            var t = new Ticket(DateTime.Parse("2026-01-08"), DateTime.Parse("2026-01-09"), 10, 2, ticketType, order);
 
             Assert.That(Ticket.Extent, Is.Not.Empty);
 

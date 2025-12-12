@@ -1,4 +1,5 @@
 
+using Amusement_Park_System;
 using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests.ExtentPersistanceTests
@@ -7,6 +8,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
     public class MalfunctionReportPersistenceTests
     {
         private string _filePath = MalfunctionReport.FilePath;
+        private RollerCoaster rollerCoaster;
 
         // before every test
         [SetUp]
@@ -16,6 +18,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
                 File.Delete(_filePath);
 
             MalfunctionReport.ClearExtent();
+            rollerCoaster = new RollerCoaster(
+                "Thunderbolt", 140, 24, true, 1200.5, 85.5, 3);
         }
 
         // after every test
@@ -34,12 +38,14 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var report1 = new MalfunctionReport(
                 "Mechanical",
                 "Roller coaster chain broke.",
-                new DateTime(2024, 1, 1));
+                new DateTime(2024, 1, 1),
+                rollerCoaster);
 
             var report2 = new MalfunctionReport(
                 "Electrical",
                 "Power outage in Zone A.",
-                new DateTime(2024, 2, 15));
+                new DateTime(2024, 2, 15),
+                rollerCoaster);
 
             Assert.That(MalfunctionReport.Extent.Count, Is.EqualTo(2));
             Assert.That(MalfunctionReport.Extent, Does.Contain(report1));
@@ -52,7 +58,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var report = new MalfunctionReport(
                 "Mechanical",
                 "Roller coaster chain broke.",
-                new DateTime(2024, 1, 1));
+                new DateTime(2024, 1, 1),
+                rollerCoaster);
 
             var fromExtent = MalfunctionReport.Extent.Single(r => r.Type == "Mechanical");
 
@@ -67,7 +74,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var report = new MalfunctionReport(
                 "Mechanical",
                 "Roller coaster chain broke.",
-                new DateTime(2024, 1, 1));
+                new DateTime(2024, 1, 1),
+                rollerCoaster);
 
             MalfunctionReport.Save();
 
@@ -81,12 +89,14 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var report1 = new MalfunctionReport(
                 "Mechanical",
                 "Roller coaster chain broke.",
-                new DateTime(2024, 1, 1));
+                new DateTime(2024, 1, 1),
+                rollerCoaster);
 
             var report2 = new MalfunctionReport(
                 "Electrical",
                 "Power outage in Zone A.",
-                new DateTime(2024, 2, 15));
+                new DateTime(2024, 2, 15),
+                rollerCoaster);
 
             MalfunctionReport.Save();
 
@@ -113,7 +123,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             var report = new MalfunctionReport(
                 "Mechanical",
                 "Roller coaster chain broke.",
-                new DateTime(2024, 1, 1));
+                new DateTime(2024, 1, 1),
+                rollerCoaster);
 
             Assert.That(MalfunctionReport.Extent, Is.Not.Empty);
 

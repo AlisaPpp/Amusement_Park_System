@@ -31,6 +31,8 @@ namespace Amusement_Park_System_Tests
             manager = new Manager("Boss", "Manager", "boss@example.com", 
                 new DateTime(1980, 1, 1), 10);
 
+            manager.AddManagedEmployee(rideOperator);
+            
             shift = new Shift(testDate, 
                 new TimeSpan(9,0,0), new TimeSpan(17,0,0),
                 rideOperator, rollerCoaster, manager);
