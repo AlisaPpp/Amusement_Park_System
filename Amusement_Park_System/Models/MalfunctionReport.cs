@@ -68,6 +68,17 @@ public class MalfunctionReport
         _attraction = attraction;
     }
     
-    
-    
+    //MaintenanceStaff association
+    private MaintenanceStaff? _assignedStaff;
+    public MaintenanceStaff? AssignedStaff => _assignedStaff;
+
+    internal void AssignStaffInternal(MaintenanceStaff staff)
+    {
+        _assignedStaff = staff;
+    }
+
+    internal void RemoveStaffInternal()
+    {
+        _assignedStaff = null;
+    }
 }
