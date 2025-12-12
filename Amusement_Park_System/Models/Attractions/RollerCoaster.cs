@@ -50,7 +50,7 @@ public class RollerCoaster : Attraction
 
     public RollerCoaster(string name, int height, int maxSeats, bool vipPassWorks, 
         double trackLength, double maxSpeed, int numberOfLoops)
-        : base(name, height, maxSeats, vipPassWorks)
+        : base(name, height, maxSeats, vipPassWorks, null)
     {
         TrackLength = trackLength;
         MaxSpeed = maxSpeed;

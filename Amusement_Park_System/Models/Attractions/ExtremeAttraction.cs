@@ -33,7 +33,7 @@ public class ExtremeAttraction : Attraction
 
 
     public ExtremeAttraction(string name, int height, int maxSeats, bool vipPassWorks, List<string>? safetyRestrictions)
-        : base(name, height, maxSeats, vipPassWorks)
+        : base(name, height, maxSeats, vipPassWorks, null)
     {
         SafetyRestrictions = safetyRestrictions;
         _extent.Add(this);

@@ -39,7 +39,7 @@ public class FourDRide : Attraction
 
     public FourDRide(string name, int height, int maxSeats, bool vipPassWorks,
         double showDuration, List<string> effectTypes)
-        : base(name, height, maxSeats, vipPassWorks)
+        : base(name, height, maxSeats, vipPassWorks, null)
     {
         ShowDuration = showDuration;
         EffectTypes = effectTypes;

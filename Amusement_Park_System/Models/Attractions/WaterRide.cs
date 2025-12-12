@@ -34,7 +34,7 @@ public class WaterRide : Attraction
 
     public WaterRide(string name, int height, int maxSeats, bool vipPassWorks,
         double waterDepth, double waterTemperature)
-        : base(name, height, maxSeats, vipPassWorks)
+        : base(name, height, maxSeats, vipPassWorks, null)
     {
         WaterDepth = waterDepth;
         WaterTemperature = waterTemperature;
