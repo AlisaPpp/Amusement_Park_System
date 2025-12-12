@@ -57,8 +57,6 @@ public class Order
 
     internal static void Delete(Order order)
     {
-        order.Customer.RemoveOrderInternal(order);
-        order.Customer = null!;
         _extent.Remove(order);
     }
     
