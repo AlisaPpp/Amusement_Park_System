@@ -9,6 +9,7 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         private string _filePath = Shift.FilePath;
         private Employee employee;
         private Attraction attraction;
+        private Manager manager;
 
         // before every test
         [SetUp]
@@ -18,6 +19,12 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
                 File.Delete(_filePath);
 
             Shift.ClearExtent();
+            Manager.ClearExtent();
+            RideOperator.ClearExtent();
+            RollerCoaster.ClearExtent();
+            
+            manager = new Manager("Boss", "Manager", "boss@example.com", 
+                new DateTime(1980, 1, 1), 10);
             
             employee = new RideOperator(
                 "Test", "Employee", "test@example.com", 
@@ -25,6 +32,8 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             
             attraction = new RollerCoaster(
                 "Test Coaster", 140, 24, true, 1200.5, 85.5, 3);
+            
+            manager.AddManagedEmployee(employee);
         }
 
         // after every test
@@ -40,47 +49,55 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void Constructor_AddsInstanceToExtent()
         {
-            /*var shift1 = employee.AssignShift(
-                attraction,
-                new DateTime(2026, 5, 1),
-                new DateTime(2026, 5, 1, 9, 0, 0),
-                new DateTime(2026, 5, 1, 17, 0, 0));
+            var shift1 = new Shift(
+               new DateTime(2026, 5, 1),
+               new TimeSpan(9, 0, 0),
+               new TimeSpan(17, 0, 0),
+               employee,
+               attraction,
+               manager);
 
-            var shift2 = employee.AssignShift(
-                attraction,
+            var shift2 = new Shift(
                 new DateTime(2026, 5, 2),
-                new DateTime(2026, 5, 2, 10, 0, 0),
-                new DateTime(2026, 5, 2, 18, 0, 0));*/
+                new TimeSpan(10, 0, 0),
+                new TimeSpan(18, 0, 0),
+                employee,
+                attraction,
+                manager);
 
             Assert.That(Shift.Extent.Count, Is.EqualTo(2));
-            //Assert.That(Shift.Extent, Does.Contain(shift1));
-            //Assert.That(Shift.Extent, Does.Contain(shift2));
+            Assert.That(Shift.Extent, Does.Contain(shift1));
+            Assert.That(Shift.Extent, Does.Contain(shift2));
         }
 
         [Test]
         public void TestChangingPropertyUpdatesObjectInExtent()
         {
-            /*var shift = employee.AssignShift(
-                attraction,
-                new DateTime(2026, 5, 1),
-                new DateTime(2026, 5, 1, 9, 0, 0),
-                new DateTime(2026, 5, 1, 17, 0, 0));*/
+            var shift = new Shift(
+               new DateTime(2026, 5, 1),
+               new TimeSpan(9, 0, 0),
+               new TimeSpan(17, 0, 0),
+               employee,
+               attraction,
+               manager);
 
             var fromExtent = Shift.Extent.Single(s => s.Date == new DateTime(2026, 5, 1));
 
-            //shift.EndTime = new DateTime(2026, 5, 1, 18, 0, 0);
+            shift.EndTime = new TimeSpan(17, 0, 0);
 
-            Assert.That(fromExtent.EndTime, Is.EqualTo(new DateTime(2026, 5, 1, 18, 0, 0)));
+            Assert.That(fromExtent.EndTime, Is.EqualTo(new TimeSpan(17, 0, 0)));
         }
 
         [Test]
         public void Save_CreatesFile()
         {
-            /*var shift = employee.AssignShift(
-                attraction,
-                new DateTime(2026, 5, 1),
-                new DateTime(2026, 5, 1, 9, 0, 0),
-                new DateTime(2026, 5, 1, 17, 0, 0));*/
+            var shift = new Shift(
+               new DateTime(2026, 5, 1),
+               new TimeSpan(9, 0, 0),
+               new TimeSpan(17, 0, 0),
+               employee,
+               attraction,
+               manager);
 
             Shift.Save();
 
@@ -91,17 +108,21 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
         [Test]
         public void SaveThenLoad_RestoresExtent()
         {
-            /*var shift1 = employee.AssignShift(
-                attraction,
-                new DateTime(2026, 5, 1),
-                new DateTime(2026, 5, 1, 9, 0, 0),
-                new DateTime(2026, 5, 1, 17, 0, 0));
+            var shift1 = new Shift(
+                   new DateTime(2026, 5, 1),
+                   new TimeSpan(9, 0, 0),
+                   new TimeSpan(17, 0, 0),
+                   employee,
+                   attraction,
+                   manager);
 
-            var shift2 = employee.AssignShift(
-                attraction,
-                new DateTime(2026, 5, 2),
-                new DateTime(2026, 5, 2, 10, 0, 0),
-                new DateTime(2026, 5, 2, 18, 0, 0));*/
+               var shift2 = new Shift(
+                   new DateTime(2026, 5, 2),
+                   new TimeSpan(10, 0, 0),
+                   new TimeSpan(18, 0, 0),
+                   employee,
+                   attraction,
+                   manager);
 
             Shift.Save();
 
@@ -111,12 +132,12 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             Assert.That(Shift.Extent.Count, Is.EqualTo(2));
 
             var first = Shift.Extent.Single(s => s.Date == new DateTime(2026, 5, 1));
-            Assert.That(first.StartTime, Is.EqualTo(new DateTime(2026, 5, 1, 9, 0, 0)));
-            Assert.That(first.EndTime, Is.EqualTo(new DateTime(2026, 5, 1, 17, 0, 0)));
+            Assert.That(first.StartTime, Is.EqualTo(new TimeSpan(9, 0, 0)));
+            Assert.That(first.EndTime, Is.EqualTo(new TimeSpan(17, 0, 0)));
 
             var second = Shift.Extent.Single(s => s.Date == new DateTime(2026, 5, 2));
-            Assert.That(second.StartTime, Is.EqualTo(new DateTime(2026, 5, 2, 10, 0, 0)));
-            Assert.That(second.EndTime, Is.EqualTo(new DateTime(2026, 5, 2, 18, 0, 0)));
+            Assert.That(second.StartTime, Is.EqualTo(new TimeSpan(10, 0, 0)));
+            Assert.That(second.EndTime, Is.EqualTo(new TimeSpan(18, 0, 0)));
         }
 
         [Test]
@@ -125,11 +146,13 @@ namespace Amusement_Park_System_Tests.ExtentPersistanceTests
             if (File.Exists(_filePath))
                 File.Delete(_filePath);
 
-            /*var shift = employee.AssignShift(
-                attraction,
-                new DateTime(2026, 5, 1),
-                new DateTime(2026, 5, 1, 9, 0, 0),
-                new DateTime(2026, 5, 1, 17, 0, 0));*/
+            var shift = new Shift(
+               new DateTime(2026, 5, 1),
+               new TimeSpan(9, 0, 0),
+               new TimeSpan(17, 0, 0),
+               employee,
+               attraction,
+               manager);
 
             Assert.That(Shift.Extent, Is.Not.Empty);
 

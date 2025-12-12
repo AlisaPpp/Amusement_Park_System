@@ -4,9 +4,19 @@ namespace Amusement_Park_System_Tests
 {
     public class OrderTests
     {
-        private readonly Order order = new Order(1, "Credit Card", 150.0m);
+        private Customer customer;
+        private Order order;
 
-        // Id Tests
+        [SetUp]
+        public void Setup()
+        {
+            Customer.ClearExtent();
+            Order.ClearExtent();
+
+            customer = new Customer("John", "Doe", "123456");
+            order = new Order(1, "Credit Card", customer);
+        }
+
         [Test]
         public void TestOrderId()
         {
@@ -16,12 +26,11 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestOrderIdSetter()
         {
-            var testOrder = new Order(1, "Credit Card", 150.0m);
+            var testOrder = new Order(1, "Credit Card", customer);
             testOrder.Id = 2;
             Assert.That(testOrder.Id, Is.EqualTo(2));
         }
 
-        // PaymentMethod Tests
         [Test]
         public void TestOrderPaymentMethod()
         {
@@ -31,63 +40,41 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestOrderEmptyPaymentMethodException()
         {
-            Assert.Throws<ArgumentException>(() => new Order(1, "", 150.0m));
+            Assert.Throws<ArgumentException>(() => new Order(1, "", customer));
         }
 
         [Test]
         public void TestOrderNullPaymentMethodException()
         {
-            Assert.Throws<ArgumentException>(() => new Order(1, null, 150.0m));
+            Assert.Throws<ArgumentException>(() => new Order(1, null, customer));
         }
 
         [Test]
         public void TestOrderPaymentMethodSetterEmptyException()
         {
-            var testOrder = new Order(1, "Credit Card", 150.0m);
+            var testOrder = new Order(1, "Credit Card", customer);
             Assert.Throws<ArgumentException>(() => testOrder.PaymentMethod = "");
         }
 
         [Test]
         public void TestOrderPaymentMethodSetterNullException()
         {
-            var testOrder = new Order(1, "Credit Card", 150.0m);
+            var testOrder = new Order(1, "Credit Card", customer);
             Assert.Throws<ArgumentException>(() => testOrder.PaymentMethod = null);
         }
 
         [Test]
         public void TestOrderPaymentMethodSetter()
         {
-            var testOrder = new Order(1, "Credit Card", 150.0m);
+            var testOrder = new Order(1, "Credit Card", customer);
             testOrder.PaymentMethod = "PayPal";
             Assert.That(testOrder.PaymentMethod, Is.EqualTo("PayPal"));
         }
 
-        // TotalPrice Tests
         [Test]
-        public void TestOrderTotalPrice()
+        public void TestOrderTotalPrice_InitiallyZero()
         {
-            Assert.That(order.TotalPrice, Is.EqualTo(150.0m));
-        }
-
-        [Test]
-        public void TestOrderNegativeTotalPriceException()
-        {
-            Assert.Throws<ArgumentException>(() => new Order(1, "Credit Card", -50.0m));
-        }
-
-        [Test]
-        public void TestOrderTotalPriceSetterNegativeException()
-        {
-            var testOrder = new Order(1, "Credit Card", 150.0m);
-            Assert.Throws<ArgumentException>(() => testOrder.TotalPrice = -50.0m);
-        }
-
-        [Test]
-        public void TestOrderTotalPriceSetter()
-        {
-            var testOrder = new Order(1, "Credit Card", 150.0m);
-            testOrder.TotalPrice = 200.0m;
-            Assert.That(testOrder.TotalPrice, Is.EqualTo(200.0m));
+            Assert.That(order.TotalPrice, Is.EqualTo(0m));
         }
     }
 }

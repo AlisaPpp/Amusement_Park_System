@@ -8,6 +8,7 @@ namespace Amusement_Park_System_Tests
         private RideOperator rideOperator;
         private RollerCoaster rollerCoaster;
         private Shift shift;
+        private Manager manager;
         private DateTime testDate;
 
         [SetUp]
@@ -26,13 +27,13 @@ namespace Amusement_Park_System_Tests
 
             rollerCoaster = new RollerCoaster(
                 "Thunderbolt", 140, 24, true, 1200.5, 85.5, 3);
+            
+            manager = new Manager("Boss", "Manager", "boss@example.com", 
+                new DateTime(1980, 1, 1), 10);
 
-            // Create shift through Employee's public method
-            /*shift = rideOperator.AssignShift(
-                rollerCoaster,
-                testDate,
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 17, 0, 0));*/
+            shift = new Shift(testDate, 
+                new TimeSpan(9,0,0), new TimeSpan(17,0,0),
+                rideOperator, rollerCoaster, manager);
         }
 
         // Date Tests
@@ -49,31 +50,28 @@ namespace Amusement_Park_System_Tests
             Assert.That(shift.Date, Is.EqualTo(new DateTime(2024, 1, 16)));
         }
 
-        // StartTime Tests
         [Test]
         public void TestShiftStartTime()
         {
-            Assert.That(shift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 9, 0, 0)));
+            Assert.That(shift.StartTime, Is.EqualTo(new TimeSpan(9,0,0)));
         }
 
         [Test]
         public void TestShiftStartTimeSetter()
         {
-            shift.StartTime = new DateTime(2024, 1, 15, 10, 0, 0);
-            Assert.That(shift.StartTime, Is.EqualTo(new DateTime(2024, 1, 15, 10, 0, 0)));
+            shift.StartTime = new TimeSpan(10, 0, 0);
+            Assert.That(shift.StartTime, Is.EqualTo(new TimeSpan(10, 0, 0)));
         }
 
-        // EndTime Tests
         [Test]
         public void TestShiftEndTime()
         {
-            Assert.That(shift.EndTime, Is.EqualTo(new DateTime(2024, 1, 15, 17, 0, 0)));
+            Assert.That(shift.EndTime, Is.EqualTo(new TimeSpan(17,0,0)));
         }
 
         [Test]
         public void TestShiftEndTimeBeforeStartTimeException()
         {
-            // Create a new employee and attraction for this test
             var tempOperator = new RideOperator(
                 "Test", "User", "test@example.com",
                 new DateTime(1990, 1, 1), 3, "OP99999", true);
@@ -81,11 +79,9 @@ namespace Amusement_Park_System_Tests
             var tempAttraction = new RollerCoaster(
                 "Test Coaster", 140, 24, true, 1000, 80, 2);
 
-            /*Assert.Throws<ArgumentException>(() => tempOperator.AssignShift(
-                tempAttraction,
-                testDate,
-                new DateTime(2024, 1, 15, 17, 0, 0),
-                new DateTime(2024, 1, 15, 9, 0, 0)));*/
+            Assert.Throws<ArgumentException>(() => new Shift(testDate, 
+                new TimeSpan(17,0,0), new TimeSpan(9,0,0),
+                tempOperator, tempAttraction, manager));
         }
 
         [Test]
@@ -98,30 +94,28 @@ namespace Amusement_Park_System_Tests
             var tempAttraction = new RollerCoaster(
                 "Test Coaster", 140, 24, true, 1000, 80, 2);
 
-            /*Assert.Throws<ArgumentException>(() => tempOperator.AssignShift(
-                tempAttraction,
-                testDate,
-                new DateTime(2024, 1, 15, 9, 0, 0),
-                new DateTime(2024, 1, 15, 9, 0, 0)));*/
+            Assert.Throws<ArgumentException>(() => new Shift(testDate, 
+                new TimeSpan(9,0,0), new TimeSpan(9,0,0),
+                tempOperator, tempAttraction, manager));
         }
 
         [Test]
         public void TestShiftEndTimeSetter()
         {
-            shift.EndTime = new DateTime(2024, 1, 15, 18, 0, 0);
-            Assert.That(shift.EndTime, Is.EqualTo(new DateTime(2024, 1, 15, 18, 0, 0)));
+            shift.EndTime = new TimeSpan(18, 0, 0);
+            Assert.That(shift.EndTime, Is.EqualTo(new TimeSpan(18, 0, 0)));
         }
 
         [Test]
         public void TestShiftEndTimeSetterBeforeStartTimeException()
         {
-            Assert.Throws<ArgumentException>(() => shift.EndTime = new DateTime(2024, 1, 15, 8, 0, 0));
+            Assert.Throws<ArgumentException>(() => shift.EndTime = new TimeSpan(8, 0, 0));
         }
 
         [Test]
         public void TestShiftEndTimeSetterEqualStartTimeException()
         {
-            Assert.Throws<ArgumentException>(() => shift.EndTime = new DateTime(2024, 1, 15, 9, 0, 0));
+            Assert.Throws<ArgumentException>(() => shift.EndTime = new TimeSpan(9, 0, 0));
         }
     }
 }
