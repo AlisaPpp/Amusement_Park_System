@@ -69,16 +69,16 @@ public class MalfunctionReport
     }
     
     //MaintenanceStaff association
-    private MaintenanceStaff? _assignedStaff;
-    public MaintenanceStaff? AssignedStaff => _assignedStaff;
+    private RideOperator? _operator;
+    public RideOperator? Operator => _operator;
 
-    internal void AssignStaffInternal(MaintenanceStaff staff)
+    internal void AssignStaffInternal(RideOperator rideOperator)
     {
-        _assignedStaff = staff;
+        _operator = rideOperator;
     }
 
     internal void RemoveStaffInternal()
     {
-        _assignedStaff = null;
+        _operator = null;
     }
 }

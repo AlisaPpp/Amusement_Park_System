@@ -50,34 +50,4 @@ public class MaintenanceStaff : Employee
             _certifications = value;
         }
     }
-    
-    //MalfunctionReport association
-    private readonly HashSet<MalfunctionReport> _reportsMade = new();
-    public IReadOnlyCollection<MalfunctionReport> ReportsMade => _reportsMade;
-
-    public void MakeReport(MalfunctionReport report)
-    {
-        if (report == null) throw new ArgumentNullException(nameof(report));
-
-        if (_reportsMade.Contains(report))
-            return;
-
-        _reportsMade.Add(report);
-
-        if (report.AssignedStaff != this)
-            report.AssignStaffInternal(this);
-    }
-
-    public void RemoveReport(MalfunctionReport report)
-    {
-        if (report == null) throw new ArgumentNullException(nameof(report));
-
-        if (!_reportsMade.Contains(report))
-            return;
-
-        _reportsMade.Remove(report);
-
-        if (report.AssignedStaff == this)
-            report.RemoveStaffInternal();
-    }
 }
