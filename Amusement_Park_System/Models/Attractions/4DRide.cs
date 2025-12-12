@@ -37,9 +37,9 @@ public class FourDRide : Attraction
         }
     }
 
-    public FourDRide(string name, int height, int maxSeats, bool vipPassWorks,
+    public FourDRide(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, 
         double showDuration, List<string> effectTypes)
-        : base(name, height, maxSeats, vipPassWorks, null)
+        : base(name, height, maxSeats, vipPassWorks, zone)
     {
         ShowDuration = showDuration;
         EffectTypes = effectTypes;

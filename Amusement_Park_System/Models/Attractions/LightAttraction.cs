@@ -22,8 +22,8 @@ public class LightAttraction : Attraction
     }
     
 
-    public LightAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool isParentSupervisionRequired )
-        : base(name, height, maxSeats, vipPassWorks, null)
+    public LightAttraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, bool isParentSupervisionRequired )
+        : base(name, height, maxSeats, vipPassWorks, zone)
     {
        IsParentSupervisionRequired = isParentSupervisionRequired;
        _extent.Add(this);

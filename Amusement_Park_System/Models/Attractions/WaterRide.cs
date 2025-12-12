@@ -32,9 +32,9 @@ public class WaterRide : Attraction
         set => _waterTemperature = value;
     }
 
-    public WaterRide(string name, int height, int maxSeats, bool vipPassWorks,
+    public WaterRide(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone,
         double waterDepth, double waterTemperature)
-        : base(name, height, maxSeats, vipPassWorks, null)
+        : base(name, height, maxSeats, vipPassWorks, zone)
     {
         WaterDepth = waterDepth;
         WaterTemperature = waterTemperature;

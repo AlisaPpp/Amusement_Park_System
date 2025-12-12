@@ -22,8 +22,8 @@ public class MediumAttraction : Attraction
         set => _familyFriendly = value;
     }
     
-    public MediumAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool familyFriendly)
-        : base(name, height, maxSeats, vipPassWorks, null)
+    public MediumAttraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, bool familyFriendly)
+        : base(name, height, maxSeats, vipPassWorks, zone)
     {
         FamilyFriendly = familyFriendly;
         _extent.Add(this);

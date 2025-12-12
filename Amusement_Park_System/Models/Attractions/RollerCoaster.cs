@@ -48,9 +48,9 @@ public class RollerCoaster : Attraction
         }
     }
 
-    public RollerCoaster(string name, int height, int maxSeats, bool vipPassWorks, 
+    public RollerCoaster(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone,
         double trackLength, double maxSpeed, int numberOfLoops)
-        : base(name, height, maxSeats, vipPassWorks, null)
+        : base(name, height, maxSeats, vipPassWorks, zone)
     {
         TrackLength = trackLength;
         MaxSpeed = maxSpeed;
