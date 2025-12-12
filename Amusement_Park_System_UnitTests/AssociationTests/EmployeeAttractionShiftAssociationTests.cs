@@ -30,7 +30,7 @@ namespace Amusement_Park_System_Tests
             FourDRide.ClearExtent();
             MediumAttraction.ClearExtent();
             LightAttraction.ClearExtent();
-            
+
             testDate = new DateTime(2024, 1, 15);
 
             rideOperator = new RideOperator("John", "Doe", "john@example.com",
@@ -52,8 +52,10 @@ namespace Amusement_Park_System_Tests
                 new List<string> { "3D Glasses", "Motion Seats", "Water Spray" });
             mediumAttraction = new MediumAttraction("Family Coaster", 120, 20, true, true);
             lightAttraction = new LightAttraction("Kiddie Ride", 100, 15, true, true);
-            
+
+            manager.AddManagedEmployee(rideOperator);
         }
+
 
         [Test]
         public void TestShiftConstructorCreatesAssociation()

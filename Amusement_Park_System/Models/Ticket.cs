@@ -99,10 +99,14 @@ public class Ticket
     {
         if (ticketType == null)
             throw new ArgumentNullException(nameof(ticketType));
-        _ticketType.RemoveTicketInternal(this);
+        
+        if (_ticketType != null)
+            _ticketType.RemoveTicketInternal(this);
+
         _ticketType = ticketType;
         ticketType.AddTicketInternal(this);
     }
+
 
     private void AssignOrder(Order order)
     {

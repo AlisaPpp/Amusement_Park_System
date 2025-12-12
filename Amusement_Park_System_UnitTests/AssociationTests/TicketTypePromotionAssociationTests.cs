@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using Amusement_Park_System.Models;
+﻿using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests
 {
@@ -124,7 +122,8 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestStaticRemoveExpiredPromotions()
         {
-            var expiredPromotion = new Promotion("Expired", DateTime.Now.AddDays(-10), DateTime.Now.AddDays(-1), 50);
+            var expiredPromotion = new Promotion("Expired",DateTime.Now,               
+                DateTime.Now.AddSeconds(-1), 50);
             ticketType1.AssignPromotion(expiredPromotion);
             
             Promotion.RemoveExpiredPromotions();

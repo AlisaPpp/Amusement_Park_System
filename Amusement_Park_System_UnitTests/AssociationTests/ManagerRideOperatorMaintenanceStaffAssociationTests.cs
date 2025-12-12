@@ -1,8 +1,6 @@
-﻿using Amusement_Park_System;
+﻿
 using Amusement_Park_System.Models;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+
 
 namespace Amusement_Park_System_Tests
 {

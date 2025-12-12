@@ -1,17 +1,15 @@
-﻿using System;
-using Amusement_Park_System;
-using NUnit.Framework;
+﻿using Amusement_Park_System;
 using Amusement_Park_System.Models;
 
 namespace Amusement_Park_System_Tests
 {
     public class ZoneTicketTypeQualifiedAssociationTests
     {
-        private Zone zone1;
-        private Zone zone2;
+        private Zone mainZone1;
+        private Zone mainZone2;
         private Zone childZone;
-        private TicketType ticketType1;
-        private TicketType ticketType2;
+        private TicketType regularTicket;
+        private TicketType vipTicket;
 
         [SetUp]
         public void Setup()
@@ -19,132 +17,131 @@ namespace Amusement_Park_System_Tests
             Zone.ClearExtent();
             TicketType.ClearExtent();
             
-            zone1 = new Zone("Main Zone", "Adventure", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
-            zone2 = new Zone("Kids Zone", "Children", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
+            mainZone1 = new Zone("Main Zone 1", "Adventure", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
+            mainZone1.AddChild(new Zone("Dummy Child 1", "Adventure", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
+            
+            mainZone2 = new Zone("Main Zone 2", "Children", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
+            mainZone2.AddChild(new Zone("Dummy Child 2", "Children", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0)));
+            
             childZone = new Zone("Child Zone", "Small", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
             
-            ticketType1 = new TicketType("Regular", false, 100m);
-            ticketType2 = new TicketType("VIP", true, 200m);
+            regularTicket = new TicketType("Regular", false, 100m);
+            vipTicket = new TicketType("VIP", true, 200m);
         }
 
         [Test]
         public void TestZoneAddTicketTypeCreatesAssociation()
         {
-            zone1.AddTicketType(ticketType1);
-            
-            Assert.That(zone1.TicketTypes, Contains.Item(ticketType1));
+            mainZone1.AddTicketType(regularTicket);
+            Assert.That(mainZone1.TicketTypes, Contains.Item(regularTicket));
         }
 
         [Test]
         public void TestTicketTypeAddZoneCreatesAssociation()
         {
-            ticketType1.AddZone(zone1);
-            
-            Assert.That(ticketType1.AccessibleZones.Keys, Contains.Item(zone1.Name));
-        }
-
-        [Test]
-        public void TestTicketTypeAddZoneOnMainZoneWorks()
-        {
-            zone1.AddChild(childZone);
-            
-            ticketType1.AddZone(zone1);
-            
-            Assert.That(ticketType1.AccessibleZones.Keys, Contains.Item(zone1.Name));
+            regularTicket.AddZone(mainZone1);
+            Assert.That(regularTicket.AccessibleZones.Keys, Contains.Item(mainZone1.Name));
+            Assert.That(mainZone1.TicketTypes, Contains.Item(regularTicket));
         }
 
         [Test]
         public void TestTicketTypeAddZoneOnNonMainZoneNonVIPThrowsException()
         {
-            Assert.Throws<InvalidOperationException>(() => ticketType1.AddZone(childZone));
+            Assert.Throws<InvalidOperationException>(() => regularTicket.AddZone(childZone));
         }
-        
 
         [Test]
         public void TestZoneRemoveTicketTypeClearsAssociation()
         {
-            zone1.AddTicketType(ticketType1);
-            zone1.AddTicketType(ticketType2);
-            
-            ticketType1.RemoveZone(zone1.Name);
-            
-            Assert.That(zone1.TicketTypes, Does.Not.Contain(ticketType1));
-            Assert.That(zone1.TicketTypes, Contains.Item(ticketType2));
+            mainZone1.AddTicketType(regularTicket);
+            mainZone1.AddTicketType(vipTicket);
+
+            regularTicket.RemoveZone(mainZone1.Name);
+
+            Assert.That(mainZone1.TicketTypes, Does.Not.Contain(regularTicket));
+            Assert.That(mainZone1.TicketTypes, Contains.Item(vipTicket));
         }
 
         [Test]
         public void TestTicketTypeRemoveZoneClearsAssociation()
         {
-            ticketType1.AddZone(zone1);
-            ticketType1.AddZone(zone2);
-            
-            ticketType1.RemoveZone(zone1.Name);
-            
-            Assert.That(ticketType1.AccessibleZones.Keys, Does.Not.Contain(zone1.Name));
-            Assert.That(ticketType1.AccessibleZones.Keys, Contains.Item(zone2.Name));
+            regularTicket.AddZone(mainZone1);
+            regularTicket.AddZone(mainZone2);
+
+            regularTicket.RemoveZone(mainZone1.Name);
+
+            Assert.That(regularTicket.AccessibleZones.Keys, Does.Not.Contain(mainZone1.Name));
+            Assert.That(regularTicket.AccessibleZones.Keys, Contains.Item(mainZone2.Name));
         }
 
         [Test]
         public void TestTicketTypeRemoveZoneThrowsException()
         {
-            Assert.Throws<KeyNotFoundException>(() => ticketType1.RemoveZone("NonExistent"));
+            Assert.Throws<KeyNotFoundException>(() => regularTicket.RemoveZone("NonExistent"));
         }
 
         [Test]
         public void TestVipTicketTypeIncludesAllZones()
         {
-            Assert.That(ticketType2.AccessibleZones.Keys, Contains.Item(zone1.Name));
-            Assert.That(ticketType2.AccessibleZones.Keys, Contains.Item(zone2.Name));
-            Assert.That(ticketType2.AccessibleZones.Keys, Contains.Item(childZone.Name));
+            Assert.That(vipTicket.AccessibleZones.Keys, Contains.Item(mainZone1.Name));
+            Assert.That(vipTicket.AccessibleZones.Keys, Contains.Item(mainZone2.Name));
+            Assert.That(vipTicket.AccessibleZones.Keys, Contains.Item(childZone.Name));
         }
 
         [Test]
-        public void TestVipTicketTypeAutoAddedToNewZone()
+        public void TestVipTicketTypeIncludesExistingZonesOnly()
+        {
+            Assert.That(vipTicket.AccessibleZones.Keys, Contains.Item(mainZone1.Name));
+            Assert.That(vipTicket.AccessibleZones.Keys, Contains.Item(mainZone2.Name));
+            Assert.That(vipTicket.AccessibleZones.Keys, Contains.Item(childZone.Name));
+        }
+
+        [Test]
+        public void TestNewZonesDoNotAutoAddToExistingVipTickets()
         {
             var newZone = new Zone("New Zone", "Fun", new TimeSpan(9, 0, 0), new TimeSpan(18, 0, 0));
-            
-            Assert.That(ticketType2.AccessibleZones.Keys, Contains.Item(newZone.Name));
+            Assert.That(vipTicket.AccessibleZones.Keys, Does.Not.Contain(newZone.Name));
         }
+
 
         [Test]
         public void TestMultipleZonesWithSameTicketType()
         {
-            ticketType1.AddZone(zone1);
-            ticketType1.AddZone(zone2);
-            
-            Assert.That(ticketType1.AccessibleZones.Keys, Contains.Item(zone1.Name));
-            Assert.That(ticketType1.AccessibleZones.Keys, Contains.Item(zone2.Name));
+            regularTicket.AddZone(mainZone1);
+            regularTicket.AddZone(mainZone2);
+
+            Assert.That(regularTicket.AccessibleZones.Keys, Contains.Item(mainZone1.Name));
+            Assert.That(regularTicket.AccessibleZones.Keys, Contains.Item(mainZone2.Name));
         }
 
         [Test]
         public void TestMultipleTicketTypesWithSameZone()
         {
-            zone1.AddTicketType(ticketType1);
-            zone1.AddTicketType(ticketType2);
-            
-            Assert.That(zone1.TicketTypes, Contains.Item(ticketType1));
-            Assert.That(zone1.TicketTypes, Contains.Item(ticketType2));
+            mainZone1.AddTicketType(regularTicket);
+            mainZone1.AddTicketType(vipTicket);
+
+            Assert.That(mainZone1.TicketTypes, Contains.Item(regularTicket));
+            Assert.That(mainZone1.TicketTypes, Contains.Item(vipTicket));
         }
 
         [Test]
         public void TestTicketTypeAddZoneDuplicateThrowsException()
         {
-            ticketType1.AddZone(zone1);
-            
-            Assert.Throws<InvalidOperationException>(() => ticketType1.AddZone(zone1));
+            regularTicket.AddZone(mainZone1);
+            Assert.Throws<InvalidOperationException>(() => regularTicket.AddZone(mainZone1));
         }
 
         [Test]
         public void TestAccessibleZonesIsReadOnly()
         {
-            var zones = ticketType1.AccessibleZones;
+            var zones = regularTicket.AccessibleZones;
             Assert.That(zones, Is.InstanceOf<IReadOnlyDictionary<string, Zone>>());
         }
 
         [Test]
         public void TestTicketTypesCollectionIsReadOnly()
         {
-            var ticketTypes = zone1.TicketTypes;
+            var ticketTypes = mainZone1.TicketTypes;
             Assert.That(ticketTypes, Is.InstanceOf<IReadOnlyCollection<TicketType>>());
         }
     }
