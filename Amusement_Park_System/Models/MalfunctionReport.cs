@@ -11,11 +11,13 @@ public class MalfunctionReport
     public static void Save() => ExtentManager.Save(_extent, FilePath);
     public static void Load() => ExtentManager.Load(ref _extent, FilePath);
     public static void ClearExtent() => _extent.Clear();
-    public MalfunctionReport(string type, string description, DateTime date)
+    public MalfunctionReport(string type, string description, DateTime date, Attraction attraction)
     {
         Type = type;
         Description = description;
         Date = date;
+        AssignAttraction(attraction);
+        attraction.AddReportInternal(this);
         _extent.Add(this);
     }
 
@@ -55,5 +57,17 @@ public class MalfunctionReport
         }
     }
     
+    //attraction association
+    private Attraction _attraction;
+    public Attraction Attraction => _attraction;
 
+    private void AssignAttraction(Attraction attraction)
+    {
+        if (attraction == null) 
+            throw new ArgumentNullException(nameof(attraction));
+        _attraction = attraction;
+    }
+    
+    
+    
 }
