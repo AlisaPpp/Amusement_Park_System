@@ -57,13 +57,17 @@ public abstract class Attraction
         get => _state;
         set => _state = value;
     }
+    
+    private Zone? _zone;
+    public Zone? Zone => _zone;
 
-    protected Attraction(string name, int height, int maxSeats, bool vipPassWorks)
+    protected Attraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone)
     {
         Name = name;
         Height = height;
         MaxSeats = maxSeats;
         VipPassWorks = vipPassWorks;
+        if (zone !=null) AssignZone(zone);
         
     }
     
@@ -85,7 +89,28 @@ public abstract class Attraction
     {
         _shifts.Remove(shift);
     }
+    
+    //zone association
 
+    public void AssignZone(Zone newZone)
+    {
+        if (newZone == null)
+            throw new ArgumentNullException(nameof(newZone));
 
+        if (_zone != null)
+            throw new InvalidOperationException("Attraction already has a zone");
+
+        _zone = newZone;
+        newZone.AddAttractionInternal(this);
+    }
+
+    public void ClearZone()
+    {
+        if (_zone == null)
+            return;
+
+        _zone.RemoveAttractionInternal(this);
+        _zone = null;
+    }
     
 }

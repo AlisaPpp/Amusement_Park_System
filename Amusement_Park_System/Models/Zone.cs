@@ -209,4 +209,31 @@ public class Zone
     {
         _shops.Remove(shop);
     }
+    
+    //attraction association
+    
+    private readonly HashSet<Attraction> _attractions = new();
+    public IReadOnlyCollection<Attraction> Attractions => _attractions.ToList().AsReadOnly();
+
+    public void AddAttraction(Attraction attraction)
+    {
+        if (attraction == null)
+            throw new ArgumentNullException(nameof(attraction));
+
+        if (_attractions.Contains(attraction))
+            return;
+
+        attraction.AssignZone(this);
+    }
+
+    internal void AddAttractionInternal(Attraction attraction)
+    {
+        _attractions.Add(attraction);
+    }
+
+    internal void RemoveAttractionInternal(Attraction attraction)
+    {
+        _attractions.Remove(attraction);
+    }
+    
 }
