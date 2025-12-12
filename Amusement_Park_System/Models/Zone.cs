@@ -185,7 +185,6 @@ public class Zone
     }
     
     //shop association
-    
     private readonly HashSet<Shop> _shops = new();
     public IReadOnlyCollection<Shop> Shops => _shops.ToList().AsReadOnly();
     
@@ -202,11 +201,16 @@ public class Zone
     
     internal void AddShopInternal(Shop shop)
     {
+        if (_shops.Contains(shop))
+            return;
         _shops.Add(shop);
+            
     }
 
     internal void RemoveShopInternal(Shop shop)
     {
+        if (!_shops.Contains(shop))
+            return;
         _shops.Remove(shop);
     }
     
