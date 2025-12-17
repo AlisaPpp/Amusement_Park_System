@@ -74,7 +74,7 @@ public class Attraction
     private Zone? _zone;
     public Zone? Zone => _zone;
 
-    protected Attraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, 
+    public Attraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, 
         IAttractionIntensity intensity, IEnumerable<IAttractionType> types)
     {
         Name = name;
