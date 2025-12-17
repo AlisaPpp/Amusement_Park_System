@@ -2,16 +2,10 @@ using Amusement_Park_System.Persistence;
 
 namespace Amusement_Park_System;
 
-public class LightAttraction : Attraction
+public class LightAttraction : IAttractionIntensity
 {
-    private static List<LightAttraction> _extent = new();
-    public static IReadOnlyList<LightAttraction> Extent => _extent.AsReadOnly();
-    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/lightAttractions.json"));
-    public static void Save() => ExtentManager.Save(_extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
-    public static void ClearExtent() => _extent.Clear();
-    
-    public static int MinimumHeightRequirement = 100;
+    public int MinimumAge => 0;
+    public int MinimumHeightRequirement => 100;
     
     private bool _isParentSupervisionRequired;
 
@@ -22,11 +16,8 @@ public class LightAttraction : Attraction
     }
     
 
-    public LightAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool isParentSupervisionRequired, 
-        Zone? zone = null)
-        : base(name, height, maxSeats, vipPassWorks, zone)
+    public LightAttraction(bool isParentSupervisionRequired)
     {
        IsParentSupervisionRequired = isParentSupervisionRequired;
-       _extent.Add(this);
     }
 }

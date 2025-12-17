@@ -2,16 +2,8 @@
 
 namespace Amusement_Park_System;
 
-public class WaterRide : Attraction
+public class WaterRide : IAttractionType
 {
-    
-    private static List<WaterRide> _extent = new();
-    public static IReadOnlyList<WaterRide> Extent => _extent.AsReadOnly();
-    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/waterRides.json"));
-    public static void Save() => ExtentManager.Save(_extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
-    public static void ClearExtent() => _extent.Clear();
-    
     private double _waterDepth;
     private double _waterTemperature;
 
@@ -32,12 +24,9 @@ public class WaterRide : Attraction
         set => _waterTemperature = value;
     }
 
-    public WaterRide(string name, int height, int maxSeats, bool vipPassWorks,
-        double waterDepth, double waterTemperature, Zone? zone  = null)
-        : base(name, height, maxSeats, vipPassWorks, zone)
+    public WaterRide(double waterDepth, double waterTemperature)
     {
         WaterDepth = waterDepth;
         WaterTemperature = waterTemperature;
-        _extent.Add(this);
     }
 }

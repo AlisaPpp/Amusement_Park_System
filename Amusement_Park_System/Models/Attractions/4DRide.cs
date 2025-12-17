@@ -3,14 +3,8 @@ using Amusement_Park_System.Persistence;
 
 namespace Amusement_Park_System;
 
-public class FourDRide : Attraction
+public class FourDRide : IAttractionType
 {
-    private static List<FourDRide> _extent = new();
-    public static IReadOnlyList<FourDRide> Extent => _extent.AsReadOnly();
-    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/fourDRides.json"));
-    public static void Save() => ExtentManager.Save(_extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
-    public static void ClearExtent() => _extent.Clear();
     
     private double _showDuration;
     private List<string> _effectTypes;
@@ -37,12 +31,9 @@ public class FourDRide : Attraction
         }
     }
 
-    public FourDRide(string name, int height, int maxSeats, bool vipPassWorks,
-        double showDuration, List<string> effectTypes, Zone? zone = null)
-        : base(name, height, maxSeats, vipPassWorks, zone)
+    public FourDRide (double showDuration, List<string> effectTypes)
     {
         ShowDuration = showDuration;
         EffectTypes = effectTypes;
-        _extent.Add(this);
     }
 }

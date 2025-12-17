@@ -2,17 +2,10 @@ using Amusement_Park_System.Persistence;
 
 namespace Amusement_Park_System;
 
-public class MediumAttraction : Attraction
+public class MediumAttraction : IAttractionIntensity
 {
-    private static List<MediumAttraction> _extent = new();
-    public static IReadOnlyList<MediumAttraction> Extent => _extent.AsReadOnly();
-    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/mediumAttractions.json"));
-    public static void Save() => ExtentManager.Save(_extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
-    public static void ClearExtent() => _extent.Clear();
-    
-    public const int MinimumHeightRequirement = 120;
-    public const int MinimumAge = 8;
+    public int MinimumHeightRequirement => 120;
+    public int MinimumAge => 8;
     
     private bool _familyFriendly;
 
@@ -22,10 +15,8 @@ public class MediumAttraction : Attraction
         set => _familyFriendly = value;
     }
     
-    public MediumAttraction(string name, int height, int maxSeats, bool vipPassWorks, bool familyFriendly, Zone? zone = null)
-        : base(name, height, maxSeats, vipPassWorks, zone)
+    public MediumAttraction(bool familyFriendly)
     {
         FamilyFriendly = familyFriendly;
-        _extent.Add(this);
     }
 }

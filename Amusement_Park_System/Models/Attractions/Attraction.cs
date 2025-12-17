@@ -1,4 +1,5 @@
 ﻿using Amusement_Park_System.Models;
+using Amusement_Park_System.Persistence;
 
 namespace Amusement_Park_System;
 using System;
@@ -7,11 +8,23 @@ using System.IO;
 
 public abstract class Attraction
 {
+    private static List<Attraction> _extent = new();
+    public static IReadOnlyList<Attraction> Extent => _extent.AsReadOnly();
+    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/attractions.json"));
+    public static void Save() => ExtentManager.Save(_extent, FilePath);
+    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
+    public static void ClearExtent() => _extent.Clear();
+    
     private string _name;
     private int _height;
     private int _maxSeats;
     private bool _vipPassWorks;
     private AttractionState _state = AttractionState.Active;
+    
+    //multi-aspect inheritance using composition method
+    public IAttractionIntensity Intensity { get;}
+    private readonly List<IAttractionType> _types = new();
+    public IReadOnlyCollection<IAttractionType> Types => _types.AsReadOnly();
 
     public string Name 
     { 
@@ -61,14 +74,24 @@ public abstract class Attraction
     private Zone? _zone;
     public Zone? Zone => _zone;
 
-    protected Attraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone)
+    protected Attraction(string name, int height, int maxSeats, bool vipPassWorks, Zone? zone, 
+        IAttractionIntensity intensity, IEnumerable<IAttractionType> types)
     {
         Name = name;
         Height = height;
         MaxSeats = maxSeats;
         VipPassWorks = vipPassWorks;
+        Intensity = intensity ?? throw new ArgumentNullException(nameof(intensity));
+        if (types == null)
+            throw new ArgumentNullException(nameof(types));
+        var typeList = types.ToList();
+        if (!typeList.Any())
+            throw new ArgumentException("Attraction must be of at least one type.");
+        if (typeList.GroupBy(t => t.GetType()).Any(g => g.Count() > 1))
+            throw new ArgumentException("Duplicate attraction types are not allowed.");
+        _types.AddRange(typeList);
         if (zone !=null) AssignZone(zone);
-        
+        _extent.Add(this);
     }
     
     //shift association

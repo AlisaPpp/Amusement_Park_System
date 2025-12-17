@@ -2,15 +2,8 @@
 
 namespace Amusement_Park_System;
 
-public class RollerCoaster : Attraction
+public class RollerCoaster : IAttractionType
 {
-    private static List<RollerCoaster> _extent = new();
-    public static IReadOnlyList<RollerCoaster> Extent => _extent.AsReadOnly();
-    public static readonly string FilePath = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../Data/rollerCoasters.json"));
-    public static void Save() => ExtentManager.Save(_extent, FilePath);
-    public static void Load() => ExtentManager.Load(ref _extent, FilePath);
-    public static void ClearExtent() => _extent.Clear();
-    
     private double _trackLength;
     private double _maxSpeed;
     private int _numberOfLoops;
@@ -48,13 +41,10 @@ public class RollerCoaster : Attraction
         }
     }
 
-    public RollerCoaster(string name, int height, int maxSeats, bool vipPassWorks,
-        double trackLength, double maxSpeed, int numberOfLoops, Zone? zone = null)
-        : base(name, height, maxSeats, vipPassWorks, zone)
+    public RollerCoaster(double trackLength, double maxSpeed, int numberOfLoops)
     {
         TrackLength = trackLength;
         MaxSpeed = maxSpeed;
         NumberOfLoops = numberOfLoops;
-        _extent.Add(this);
     }
 }
