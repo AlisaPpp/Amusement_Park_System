@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-public abstract class Attraction
+public class Attraction
 {
     private static List<Attraction> _extent = new();
     public static IReadOnlyList<Attraction> Extent => _extent.AsReadOnly();
