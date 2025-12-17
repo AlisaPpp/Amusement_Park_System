@@ -63,14 +63,6 @@ public class Shift
     
     private void AssignEmployee(Employee employee)
     {
-        if (employee == null)
-            throw new ArgumentNullException(nameof(employee));
-        
-        if (_employee != null!)
-        {
-            _employee.RemoveShiftInternal(this);
-        }
-
         _employee = employee;
         employee.AddShiftInternal(this);
     }
