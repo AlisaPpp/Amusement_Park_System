@@ -1,6 +1,5 @@
-﻿using NUnit.Framework;
+﻿
 using Amusement_Park_System.Models;
-using System;
 
 namespace Amusement_Park_System_Tests
 {
@@ -45,16 +44,14 @@ namespace Amusement_Park_System_Tests
                 15
             );
         }
-
-        // ABSTRACT BASE CLASS
+        
 
         [Test]
         public void Employee_Is_Abstract()
         {
             Assert.That(typeof(Employee).IsAbstract, Is.True);
         }
-
-        //INHERITANCE 
+        
 
         [Test]
         public void RideOperator_Is_Employee()
@@ -73,8 +70,7 @@ namespace Amusement_Park_System_Tests
         {
             Assert.That(_manager, Is.InstanceOf<Employee>());
         }
-
-        // DISJOINTNESS
+        
 
         [Test]
         public void RideOperator_Is_Not_MaintenanceStaff_Or_Manager()
@@ -96,8 +92,7 @@ namespace Amusement_Park_System_Tests
             Assert.That(_manager, Is.Not.InstanceOf<RideOperator>());
             Assert.That(_manager, Is.Not.InstanceOf<MaintenanceStaff>());
         }
-
-        // COMPLETENESS 
+        
 
         [Test]
         public void All_Employees_Belong_To_Exactly_One_Subclass()
