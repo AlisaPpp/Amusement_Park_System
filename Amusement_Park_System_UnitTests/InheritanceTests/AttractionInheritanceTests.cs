@@ -28,12 +28,6 @@ namespace Amusement_Park_System_Tests
         }
 
         [Test]
-        public void Attraction_Is_Abstract()
-        {
-            Assert.That(typeof(Attraction).IsAbstract, Is.True);
-        }
-
-        [Test]
         public void Can_Create_Attraction_With_Intensity_And_Types()
         {
             var attraction = new Attraction(
@@ -61,7 +55,7 @@ namespace Amusement_Park_System_Tests
                     10,
                     true,
                     null,
-                    _extremeIntensity,
+                    null,
                     new List<IAttractionType> { _rollerCoaster }
                 )
             );
