@@ -1,15 +1,16 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
 using Amusement_Park_System;
 using Amusement_Park_System.Models;
-
+using NUnit.Framework;
 
 namespace Amusement_Park_System_Tests
 {
     public class RideOperatorMalfunctionReportAssociationTests
     {
-        private RideOperator rideOperator;
-        private RollerCoaster rollerCoaster;
-        private WaterRide waterRide;
+        private RideOperator rideOperator = null!;
+        private Attraction rollerCoasterAttraction = null!;
+        private Attraction waterRideAttraction = null!;
         private DateTime testDate;
 
         [SetUp]
@@ -17,22 +18,42 @@ namespace Amusement_Park_System_Tests
         {
             RideOperator.ClearExtent();
             MalfunctionReport.ClearExtent();
-            RollerCoaster.ClearExtent();
-            WaterRide.ClearExtent();
+            Attraction.ClearExtent();
 
             testDate = new DateTime(2025, 12, 12);
 
-            rideOperator = new RideOperator("John", "Doe", "john@example.com",
-                new DateTime(1990, 1, 1), 5, "OP12345", true);
+            rideOperator = new RideOperator(
+                "John",
+                "Doe",
+                "john@example.com",
+                new DateTime(1990, 1, 1),
+                5,
+                "OP12345",
+                true);
 
-            rollerCoaster = new RollerCoaster("Thunderbolt", 140, 24, true, 1200.5, 85.5, 3);
-            waterRide = new WaterRide("Splash Mountain", 120, 20, true, 2.5, 25.0);
+            rollerCoasterAttraction = new Attraction(
+                "Thunderbolt",
+                140,
+                24,
+                true,
+                null,
+                new ExtremeAttraction(null),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+
+            waterRideAttraction = new Attraction(
+                "Splash Mountain",
+                120,
+                20,
+                true,
+                null,
+                new MediumAttraction(true),
+                new List<IAttractionType> { new WaterRide(2.5, 25.0) });
         }
 
         [Test]
         public void TestRideOperatorCanMakeReport()
         {
-            var report = new MalfunctionReport("Mechanical", "Chain issue", testDate, rollerCoaster);
+            var report = new MalfunctionReport("Mechanical", "Chain issue", testDate, rollerCoasterAttraction);
 
             rideOperator.MakeReport(report);
 
@@ -43,10 +64,10 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestRideOperatorCannotAddSameReportTwice()
         {
-            var report = new MalfunctionReport("Electrical", "Panel issue", testDate, waterRide);
+            var report = new MalfunctionReport("Electrical", "Panel issue", testDate, waterRideAttraction);
 
             rideOperator.MakeReport(report);
-            rideOperator.MakeReport(report); // second call
+            rideOperator.MakeReport(report);
 
             Assert.That(rideOperator.ReportsMade.Count, Is.EqualTo(1));
         }
@@ -54,7 +75,7 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestRemovingReportDisassociatesOperator()
         {
-            var report = new MalfunctionReport("Mechanical", "Brake issue", testDate, rollerCoaster);
+            var report = new MalfunctionReport("Mechanical", "Brake issue", testDate, rollerCoasterAttraction);
 
             rideOperator.MakeReport(report);
             rideOperator.RemoveReport(report);
@@ -66,9 +87,8 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestRemovingNonExistentReportDoesNothing()
         {
-            var report = new MalfunctionReport("Electrical", "Fuse issue", testDate, waterRide);
+            var report = new MalfunctionReport("Electrical", "Fuse issue", testDate, waterRideAttraction);
 
-            // Removing without adding first
             rideOperator.RemoveReport(report);
 
             Assert.That(report.Operator, Is.Null);
@@ -90,8 +110,8 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestMultipleReportsMadeByOperator()
         {
-            var report1 = new MalfunctionReport("Mechanical", "Gear issue", testDate, rollerCoaster);
-            var report2 = new MalfunctionReport("Electrical", "Panel flicker", testDate, waterRide);
+            var report1 = new MalfunctionReport("Mechanical", "Gear issue", testDate, rollerCoasterAttraction);
+            var report2 = new MalfunctionReport("Electrical", "Panel flicker", testDate, waterRideAttraction);
 
             rideOperator.MakeReport(report1);
             rideOperator.MakeReport(report2);
@@ -104,7 +124,7 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestReportsMadeCollectionIsReadOnly()
         {
-            var report = new MalfunctionReport("Mechanical", "Brake failure", testDate, rollerCoaster);
+            var report = new MalfunctionReport("Mechanical", "Brake failure", testDate, rollerCoasterAttraction);
             rideOperator.MakeReport(report);
 
             Assert.That(rideOperator.ReportsMade, Is.InstanceOf<IReadOnlyCollection<MalfunctionReport>>());
