@@ -1,13 +1,28 @@
-﻿using Amusement_Park_System;
+﻿using System;
+using System.Collections.Generic;
+using Amusement_Park_System;
+using NUnit.Framework;
 
 namespace Amusement_Park_System_Tests
 {
     public class LightAttractionTests
     {
-        private Attraction lightAttraction = new LightAttraction("Zadra",
-            100, 20, true, true);
+        private Attraction lightAttraction = null!;
 
-        // Name Tests
+        [SetUp]
+        public void Setup()
+        {
+            Attraction.ClearExtent();
+            lightAttraction = new Attraction(
+                "Zadra",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+        }
+
         [Test]
         public void TestLightAttractionName()
         {
@@ -17,30 +32,59 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestLightAttractionEmptyNameException()
         {
-            Assert.Throws<ArgumentException>(() => new LightAttraction("", 100, 20, true, true));
+            Assert.Throws<ArgumentException>(() => new Attraction(
+                "",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) }));
         }
 
         [Test]
         public void TestLightAttractionNullNameException()
         {
-            Assert.Throws<ArgumentException>(() => new LightAttraction(null, 100, 20, true, true));
+            Assert.Throws<ArgumentException>(() => new Attraction(
+                null!,
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) }));
         }
 
         [Test]
         public void TestLightAttractionNameSetterEmptyException()
         {
-            var attraction = new LightAttraction("Test", 100, 20, true, true);
+            var attraction = new Attraction(
+                "Test",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+
             Assert.Throws<ArgumentException>(() => attraction.Name = "");
         }
 
         [Test]
         public void TestLightAttractionNameSetterNullException()
         {
-            var attraction = new LightAttraction("Test", 100, 20, true, true);
-            Assert.Throws<ArgumentException>(() => attraction.Name = null);
+            var attraction = new Attraction(
+                "Test",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+
+            Assert.Throws<ArgumentException>(() => attraction.Name = null!);
         }
 
-        // Height Tests
         [Test]
         public void TestLightAttractionHeight()
         {
@@ -50,17 +94,31 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestLightAttractionNegativeHeightException()
         {
-            Assert.Throws<ArgumentException>(() => new LightAttraction("Test", -10, 20, true, true));
+            Assert.Throws<ArgumentException>(() => new Attraction(
+                "Test",
+                -10,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) }));
         }
 
         [Test]
         public void TestLightAttractionHeightSetterNegativeException()
         {
-            var attraction = new LightAttraction("Test", 100, 20, true, true);
+            var attraction = new Attraction(
+                "Test",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+
             Assert.Throws<ArgumentException>(() => attraction.Height = -10);
         }
 
-        // MaxSeats Tests
         [Test]
         public void TestLightAttractionMaxSeats()
         {
@@ -70,56 +128,81 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestLightAttractionZeroMaxSeatsException()
         {
-            Assert.Throws<ArgumentException>(() => new LightAttraction("Test", 100, 0, true, true));
+            Assert.Throws<ArgumentException>(() => new Attraction(
+                "Test",
+                100,
+                0,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) }));
         }
 
         [Test]
         public void TestLightAttractionNegativeMaxSeatsException()
         {
-            Assert.Throws<ArgumentException>(() => new LightAttraction("Test", 100, -5, true, true));
+            Assert.Throws<ArgumentException>(() => new Attraction(
+                "Test",
+                100,
+                -5,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) }));
         }
 
         [Test]
         public void TestLightAttractionMaxSeatsSetterZeroException()
         {
-            var attraction = new LightAttraction("Test", 100, 20, true, true);
+            var attraction = new Attraction(
+                "Test",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+
             Assert.Throws<ArgumentException>(() => attraction.MaxSeats = 0);
         }
 
         [Test]
         public void TestLightAttractionMaxSeatsSetterNegativeException()
         {
-            var attraction = new LightAttraction("Test", 100, 20, true, true);
+            var attraction = new Attraction(
+                "Test",
+                100,
+                20,
+                true,
+                null,
+                new LightAttraction(true),
+                new List<IAttractionType> { new RollerCoaster(1200.5, 85.5, 3) });
+
             Assert.Throws<ArgumentException>(() => attraction.MaxSeats = -5);
         }
 
-        // VipPassWorks Tests
         [Test]
         public void TestLightAttractionVipPassWorks()
         {
             Assert.That(lightAttraction.VipPassWorks, Is.True);
         }
 
-        // State Tests
         [Test]
         public void TestLightAttractionState()
         {
             Assert.That(lightAttraction.State, Is.EqualTo(AttractionState.Active));
         }
 
-        // IsParentSupervisionRequired Tests
         [Test]
         public void TestLightAttractionIsParentSupervisionRequired()
         {
-            var light = (LightAttraction)lightAttraction;
-            Assert.That(light.IsParentSupervisionRequired, Is.True);
+            Assert.That(((LightAttraction)lightAttraction.Intensity).IsParentSupervisionRequired, Is.True);
         }
 
-        // MinimumHeightRequirement Tests 
         [Test]
         public void TestLightAttractionMinimumHeightRequirement()
         {
-            Assert.That(LightAttraction.MinimumHeightRequirement, Is.EqualTo(100));
+            Assert.That(lightAttraction.Intensity.MinimumHeightRequirement, Is.EqualTo(100));
         }
     }
 }

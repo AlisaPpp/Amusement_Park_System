@@ -1,14 +1,17 @@
-﻿using Amusement_Park_System;
+﻿using System;
+using System.Collections.Generic;
+using Amusement_Park_System;
 using Amusement_Park_System.Models;
+using NUnit.Framework;
 
 namespace Amusement_Park_System_Tests
 {
     public class ShiftTests
     {
-        private RideOperator rideOperator;
-        private RollerCoaster rollerCoaster;
-        private Shift shift;
-        private Manager manager;
+        private RideOperator rideOperator = null!;
+        private Attraction attraction = null!;
+        private Shift shift = null!;
+        private Manager manager = null!;
         private DateTime testDate;
 
         [SetUp]
@@ -16,29 +19,49 @@ namespace Amusement_Park_System_Tests
         {
             Shift.ClearExtent();
             RideOperator.ClearExtent();
-            RollerCoaster.ClearExtent();
+            Manager.ClearExtent();
+            Attraction.ClearExtent();
 
             testDate = new DateTime(2024, 1, 15);
 
-            // Create required objects first
             rideOperator = new RideOperator(
                 "John", "Doe", "john@example.com",
                 new DateTime(1990, 1, 1), 3, "OP12345", true);
 
-            rollerCoaster = new RollerCoaster(
-                "Thunderbolt", 140, 24, true, 1200.5, 85.5, 3);
+           
+            var rollerCoasterType = new RollerCoaster(
+                trackLength: 1200.5,
+                maxSpeed: 85.5,
+                numberOfLoops: 3);
+
             
-            manager = new Manager("Boss", "Manager", "boss@example.com", 
+            var intensity = new MediumAttraction(familyFriendly: true);
+
+            
+            attraction = new Attraction(
+                name: "Thunderbolt",
+                height: 140,
+                maxSeats: 24,
+                vipPassWorks: true,
+                zone: null,
+                intensity: intensity,
+                types: new List<IAttractionType> { rollerCoasterType });
+
+            manager = new Manager(
+                "Boss", "Manager", "boss@example.com",
                 new DateTime(1980, 1, 1), 10);
 
             manager.AddManagedEmployee(rideOperator);
-            
-            shift = new Shift(testDate, 
-                new TimeSpan(9,0,0), new TimeSpan(17,0,0),
-                rideOperator, rollerCoaster, manager);
+
+            shift = new Shift(
+                testDate,
+                new TimeSpan(9, 0, 0),
+                new TimeSpan(17, 0, 0),
+                rideOperator,
+                attraction,
+                manager);
         }
 
-        // Date Tests
         [Test]
         public void TestShiftDate()
         {
@@ -55,7 +78,7 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftStartTime()
         {
-            Assert.That(shift.StartTime, Is.EqualTo(new TimeSpan(9,0,0)));
+            Assert.That(shift.StartTime, Is.EqualTo(new TimeSpan(9, 0, 0)));
         }
 
         [Test]
@@ -68,7 +91,7 @@ namespace Amusement_Park_System_Tests
         [Test]
         public void TestShiftEndTime()
         {
-            Assert.That(shift.EndTime, Is.EqualTo(new TimeSpan(17,0,0)));
+            Assert.That(shift.EndTime, Is.EqualTo(new TimeSpan(17, 0, 0)));
         }
 
         [Test]
@@ -78,12 +101,27 @@ namespace Amusement_Park_System_Tests
                 "Test", "User", "test@example.com",
                 new DateTime(1990, 1, 1), 3, "OP99999", true);
 
-            var tempAttraction = new RollerCoaster(
-                "Test Coaster", 140, 24, true, 1000, 80, 2);
+            manager.AddManagedEmployee(tempOperator);
 
-            Assert.Throws<ArgumentException>(() => new Shift(testDate, 
-                new TimeSpan(17,0,0), new TimeSpan(9,0,0),
-                tempOperator, tempAttraction, manager));
+            var tempType = new RollerCoaster(trackLength: 1000, maxSpeed: 80, numberOfLoops: 2);
+            var tempIntensity = new LightAttraction(isParentSupervisionRequired: false);
+
+            var tempAttraction = new Attraction(
+                name: "Test Coaster",
+                height: 140,
+                maxSeats: 24,
+                vipPassWorks: true,
+                zone: null,
+                intensity: tempIntensity,
+                types: new List<IAttractionType> { tempType });
+
+            Assert.Throws<ArgumentException>(() => new Shift(
+                testDate,
+                new TimeSpan(17, 0, 0),
+                new TimeSpan(9, 0, 0),
+                tempOperator,
+                tempAttraction,
+                manager));
         }
 
         [Test]
@@ -93,12 +131,27 @@ namespace Amusement_Park_System_Tests
                 "Test", "User", "test@example.com",
                 new DateTime(1990, 1, 1), 3, "OP99999", true);
 
-            var tempAttraction = new RollerCoaster(
-                "Test Coaster", 140, 24, true, 1000, 80, 2);
+            manager.AddManagedEmployee(tempOperator);
 
-            Assert.Throws<ArgumentException>(() => new Shift(testDate, 
-                new TimeSpan(9,0,0), new TimeSpan(9,0,0),
-                tempOperator, tempAttraction, manager));
+            var tempType = new RollerCoaster(trackLength: 1000, maxSpeed: 80, numberOfLoops: 2);
+            var tempIntensity = new LightAttraction(isParentSupervisionRequired: false);
+
+            var tempAttraction = new Attraction(
+                name: "Test Coaster",
+                height: 140,
+                maxSeats: 24,
+                vipPassWorks: true,
+                zone: null,
+                intensity: tempIntensity,
+                types: new List<IAttractionType> { tempType });
+
+            Assert.Throws<ArgumentException>(() => new Shift(
+                testDate,
+                new TimeSpan(9, 0, 0),
+                new TimeSpan(9, 0, 0),
+                tempOperator,
+                tempAttraction,
+                manager));
         }
 
         [Test]
